@@ -23,8 +23,8 @@ align-items: center;
     font-size: 4rem;
     color: white;
     animation: slideIn 3s ease-in-out;
-    z-index: 10; /* Ensure the title is above the circle */
-    text-decoration: none; /* Remove underline from the link */
+    z-index: 10; 
+    text-decoration: none; 
   }
   
 

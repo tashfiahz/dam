@@ -26,7 +26,7 @@
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: purple;
+    background-color: #8860D0;
     overflow-x: hidden;
     padding-top: 20px;
   }
@@ -82,8 +82,8 @@
   .centeredContainer {
     display: flex;
     justify-content: flex-start;
-    margin-top: -350px; /* Adjust the value to add space between the search bar and other content */
-    margin-left: -400px; /* Add left margin to move it over to the left */
+    margin-top: -340px; /* Adjust the value to add space between the search bar and other content */
+    margin-left: -370px; /* Add left margin to move it over to the left */
   }
   
   

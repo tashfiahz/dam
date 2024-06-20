@@ -26,7 +26,6 @@ function HomePage() {
         </div>
       </div>
       <div className={styles.content}>
-        {/* Centered Search Bar */}
         <div className={styles.centeredContainer}>
           <div className={styles.searchBar}>
             <input type="text" placeholder="Search..." />
