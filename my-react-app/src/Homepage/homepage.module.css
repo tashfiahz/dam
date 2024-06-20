@@ -52,7 +52,12 @@
   }
   
   .logo {
-    opacity: 0.5;
+    mix-blend-mode: multiply;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
   }
   
   .filterSection {
