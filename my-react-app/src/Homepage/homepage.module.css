@@ -79,3 +79,36 @@
     padding: 20px;
   }
   
+  .centeredContainer {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: -350px; /* Adjust the value to add space between the search bar and other content */
+    margin-left: -400px; /* Add left margin to move it over to the left */
+  }
+  
+  
+  .searchBar {
+    display: flex;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 40px; /* Adjust the value to change the roundness of the search bar */
+    padding: 5px 10px; /* Adjust the values to increase/decrease padding inside the search bar */
+  }
+  
+  .searchBar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-family: 'Jura', sans-serif;
+  }
+  
+  .searchBar button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 1rem; /* Adjust the value to change the size of the button */
+    margin-left: 250px; /* Adjust the value to add space between the input and the button */
+    cursor: pointer;
+  }
+  

@@ -3,7 +3,11 @@ import styles from './homepage.module.css'; // Import styles for HomePage compon
 import logo from './penguin.png'; 
 
 function HomePage() {
-  console.log('Rendering HomePage component');
+  const handleSearch = () => {
+    // Perform search functionality here
+    console.log('Searching...');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
@@ -22,10 +26,23 @@ function HomePage() {
         </div>
       </div>
       <div className={styles.content}>
+        {/* Centered Search Bar */}
+        <div className={styles.centeredContainer}>
+          <div className={styles.searchBar}>
+            <input type="text" placeholder="Search..." />
+            <button className={styles.searchButton} onClick={handleSearch}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M21.7 20.3l-4.5-4.5c1-1.3 1.6-3 1.6-4.8 0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8c1.8 0 3.5-0.6 4.8-1.6l4.5 4.5c0.2 0.2 0.5 0.3 0.7 0.3s0.5-0.1 0.7-0.3c0.4-0.4 0.4-1 0-1.4zM9.9 16.1c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
         {/* Content goes here */}
       </div>
     </div>
   );
 }
+
+
 
 export default HomePage;

@@ -19,12 +19,14 @@ align-items: center;
 }
 
 .title {
-font-family: 'Jura', sans-serif;
-font-size: 4rem;
-color: white;
-animation: slideIn 3s ease-in-out;
-z-index: 10; /* Ensure the title is above the circle */
-}
+    font-family: 'Jura', sans-serif;
+    font-size: 4rem;
+    color: white;
+    animation: slideIn 3s ease-in-out;
+    z-index: 10; /* Ensure the title is above the circle */
+    text-decoration: none; /* Remove underline from the link */
+  }
+  
 
 @keyframes slideIn {
 from {
@@ -41,7 +43,7 @@ opacity: 1;
 position: absolute;
 width: 250px;
 height: 250px;
-border: 10px solid rgba(255, 255, 255, 0.7);
+border: 50px solid rgba(255, 255, 255, 0.7);
 border-radius: 50%;
 animation: spin 5s linear infinite, glow 3s ease-in-out infinite alternate;
 }
@@ -57,9 +59,9 @@ transform: rotate(360deg);
 
 @keyframes glow {
 from {
-box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+box-shadow: white;
 }
 to {
-box-shadow: 0 0 0px rgba(255, 255, 255, 1);
+box-shadow: white;
 }
 }
