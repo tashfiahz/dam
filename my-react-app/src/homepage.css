@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: purple;
+    color: white;
+    padding: 20px;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+h1, h2, p {
+    margin: 0;
+    color: #333;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
