@@ -82,8 +82,8 @@
   .centeredContainer {
     display: flex;
     justify-content: flex-start;
-    margin-top: -340px; /* Adjust the value to add space between the search bar and other content */
-    margin-left: -370px; /* Add left margin to move it over to the left */
+    margin-top: -380px; /* Adjust the value to add space between the search bar and other content */
+    margin-left: -570px; /* Add left margin to move it over to the left */
   }
   
   
@@ -108,7 +108,7 @@
     border: none;
     color: black;
     font-size: 1rem; /* Adjust the value to change the size of the button */
-    margin-left: 250px; /* Adjust the value to add space between the input and the button */
+    margin-left: 300px; /* Adjust the value to add space between the input and the button */
     cursor: pointer;
   }
   
