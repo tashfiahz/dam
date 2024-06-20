@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap');
+
+.App {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-image: url('./background.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+.title-container {
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.title {
+font-family: 'Jura', sans-serif;
+font-size: 4rem;
+color: white;
+animation: slideIn 3s ease-in-out;
+z-index: 10; /* Ensure the title is above the circle */
+}
+
+@keyframes slideIn {
+from {
+transform: translateY(-100%);
+opacity: 0;
+}
+to {
+transform: translateY(0);
+opacity: 1;
+}
+}
+
+.circle {
+position: absolute;
+width: 250px;
+height: 250px;
+border: 10px solid rgba(255, 255, 255, 0.7);
+border-radius: 50%;
+animation: spin 5s linear infinite, glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+0% {
+transform: rotate(0deg);
+}
+100% {
+transform: rotate(360deg);
+}
+}
+
+@keyframes glow {
+from {
+box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+to {
+box-shadow: 0 0 100px rgba(255, 255, 255, 1);
+}
+}

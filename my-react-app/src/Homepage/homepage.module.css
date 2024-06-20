@@ -1,0 +1,53 @@
+/* homepage.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Jura', sans-serif;
+    background-color: white; /* Set background color to white */
+  }
+  
+  .container {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: purple;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  .title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    opacity: 0.5;
+  }
+  
+  .filterSection {
+    margin-top: 10px;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+    color: white; /* Set text color to white */
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  
