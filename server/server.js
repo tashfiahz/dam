@@ -1,15 +1,17 @@
 import express from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 import fs from 'fs';
 
 const app = express();
 const port = 3000;
 
 const image_api = 'https://api.bing.microsoft.com/v7.0/images/visualsearch';
-const image_api_key = '053301e1a8d841659d928a5476a0c395';
+const image_api_key = process.env.IMAGE_API_KEY;
 
-const audio_api = 'https://api.audd.io/recognize';
-const audio_api_key = '173e87ad96719cbe62d0f07b4d5f4d1f';
+const audio_api = 'https://enterprise.audd.io/';
+const audio_api_key = process.env.AUDIO_API_KEY;
 
 app.get('/', (req, res) => {
     res.json('ExpressJS server response OK!')
@@ -60,12 +62,16 @@ app.get('/image_search', async (req, res) => {
     }
 });
 
+
+//LIMIT TESTING TO PRESERVE MONTHLY REQUESTS
 app.get('/audio_recognition', async (req, res) => {
     const info = {
         'api_token': audio_api_key,
-        'file': fs.createReadStream('./test_media/beethoven.mp4'),
-        'return': 'apple_music,spotify'
-    }
+        'url': 'https://audd.tech/djatwork_example.mp3',
+        'accurate_offsets': 'true',
+        'skip': '3',
+        'every': '1',
+    };
     try {
         const response = await axios.post(audio_api, info, {
             headers: {
