@@ -7,11 +7,11 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isDraggingOver, setIsDraggingOver] = useState(false); // State to track drag over state
+  const [uploadMediaType, setUploadMediaType] = useState(''); // New state for the drop-down
 
   const handleFileDropEvent = (e) => {
     e.preventDefault();
     setIsDraggingOver(false);
-    // Handle file drop logic here
     handleFileDrop(e);
   };
 
@@ -38,7 +38,7 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   };
 
   const handleUpload = () => {
-    console.log(`Title: ${title}, Description: ${description}`);
+    console.log(`Title: ${title}, Description: ${description}, Media Type: ${uploadMediaType}`);
     // Logic to handle upload functionality
     // Close modal or navigate to next step
   };
@@ -52,9 +52,10 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   };
 
   const handleFileInputChange = (e) => {
-    // Handle file selection logic here
     handleFileSelect(e);
   };
+
+  const handleUploadMediaTypeChange = (e) => setUploadMediaType(e.target.value);
 
   return (
     <div className={styles.modalOverlay}>
@@ -83,7 +84,7 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
                   onChange={handleFileInputChange}
                 />
               </div>
-              <button className={`${styles.modalActionButton} ${styles.lightBlueButton}`} onClick={handleNext}>Next Step</button>
+              <button className={`${styles.modalNextButton} ${styles.lightBlueButton}`} onClick={handleNext}>Next Step</button>
             </div>
           )}
           {uploadStage === 2 && (
@@ -95,14 +96,25 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
                 onChange={handleTitleChange}
                 className={styles.titleInput}
               />
+              <select
+                value={uploadMediaType}
+                onChange={handleUploadMediaTypeChange}
+                className={styles.uploadMediaTypeSelect}
+              >
+                <option value="">Select media type...</option>
+                <option value="photo">Photo</option>
+                <option value="video">Video</option>
+              </select>
+
               <textarea
                 placeholder="Enter description..."
                 value={description}
                 onChange={handleDescriptionChange}
                 className={styles.descriptionTextarea}
               />
-              <button className={`${styles.modalActionButton} ${styles.lightBlueButton}`} onClick={handleUpload}>Upload</button>
-              <button className={`${styles.modalBackButton} ${styles.lightBlueButton} ${styles.backButton}`} onClick={handleBack}>Back</button>
+             
+             <button className={`${styles.modalUploadButton} ${styles.lightBlueButton}`} onClick={handleUpload}>Upload</button> 
+             <button className={`${styles.modalBackButton} ${styles.lightBlueButton} ${styles.backButton}`} onClick={handleBack}>&#8249;</button>
             </div>
           )}
         </div>
