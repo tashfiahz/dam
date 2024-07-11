@@ -33,7 +33,7 @@ function HomePage() {
 
   const handleFile = (file) => {
     setSelectedFile(file);
-    closeModal(); // Close modal after selecting the file (you can adjust this behavior as needed)
+    closeModal(); // Close modal after selecting the file 
     // Handle further processing of the file (e.g., upload to server, display preview, etc.)
     console.log('Selected file:', file);
   };
