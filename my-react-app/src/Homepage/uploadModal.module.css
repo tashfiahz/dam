@@ -1,0 +1,170 @@
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadModal {
+  background-color: white;
+  width: 80%;
+  max-width: 600px; /* Adjust maximum width as needed */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.modalCloseButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.modalCloseButton:focus {
+  outline: none;
+}
+
+.modalContent {
+  padding: 10px;
+}
+
+.modalNextButton {
+  background-color:  #84CEEB; /* Light blue background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 450px;
+}
+
+.modalUploadButton {
+  background-color:  #84CEEB; /* Light blue background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 500px;
+}
+
+.backButton {
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  width: 40px; 
+  height: 40px;
+  font-size: 1.5rem; 
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.backButton:hover {
+  background-color: #5680E9; /* Darker blue on hover */
+}
+
+.modalNextButton:hover {
+  background-color: #5680E9; /* Gradient dark purple */
+}
+
+.lightBlueButton {
+  background-color: #84CEEB; /* Light blue background */
+  color: white;
+}
+
+.lightBlueButton:hover {
+  background-image: #5680E9; /* Gradient dark purple */
+}
+
+.initialStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropArea {
+  border: 2px dashed #ccc;
+  padding: 70px;
+  width: 250px;
+  margin-bottom: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dragFileChange {
+  opacity: 0.35;
+  background-color: #5AB9EA; /* Background color when dragged over */
+  border-color: #5680E9; /* Border color when dragged over */
+}
+
+
+.titleInput, .descriptionTextarea, .uploadMediaTypeSelect {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: Arial;
+}
+
+
+.titleInput:focus,
+.descriptionTextarea:focus,
+.uploadMediaTypeSelect:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.uploadMediaTypeSelect option {
+  padding: 8px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+.mediaTypeSelect:focus {
+  cursor: pointer;
+}
+
+.backButton {
+  margin-top: 10px;
+}
+
+.uploadIcon {
+  width: 70px; 
+  height: auto; 
+  margin-bottom: 10px;  
+  margin-left: 90px; 
+  display: block; 
+}
+
+.mediaTypeSelect {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+
