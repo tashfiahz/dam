@@ -8,11 +8,13 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   const [description, setDescription] = useState('');
   const [isDraggingOver, setIsDraggingOver] = useState(false); // State to track drag over state
   const [uploadMediaType, setUploadMediaType] = useState(''); // New state for the drop-down
+  const [file, setFile] = useState(null);
 
   const handleFileDropEvent = (e) => {
     e.preventDefault();
     setIsDraggingOver(false);
     handleFileDrop(e);
+    //  setFile(e.dataTransfer.files[0]); // Set the file state when a file is dropped
   };
 
   const handleDragEnter = (e) => {
@@ -37,10 +39,91 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
     setUploadStage(2);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     console.log(`Title: ${title}, Description: ${description}, Media Type: ${uploadMediaType}`);
+    if (!file) {
+      alert('Please select a file to upload.');
+      return;
+    }
+
+    const fileData = new FormData();
+    fileData.append('file', file);
+
+    try {
+      // Step 1: Upload the file to GCS and get the URL
+      const filegcs = await fetch('http://localhost:3500/upload-gcs', {
+        method: 'POST',
+        body: fileData,
+      });
+
+      if (!filegcs.ok) {
+        const uploadResult = await filegcs.json();
+        alert('File upload failed: ' + uploadResult.message);
+        return;
+      }
+
+      const { url: fileUrl } = await filegcs.json();
+
+      // Step 2: Collect metadata and send it to MongoDB
+      const metadata = {
+        tag: title,
+        type: uploadMediaType,
+        description: description,
+        url: fileUrl,
+      };
+
+      const metadataResponse = await fetch('http://localhost:3500/upload-metadata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(metadata),
+      });
+
+      if (metadataResponse.ok) {
+        alert('File and metadata uploaded successfully.');
+        closeModal();
+      } else {
+        const metadataResult = await metadataResponse.json();
+        alert('Failed to store metadata: ' + metadataResult.message);
+      }
+    } catch (error) {
+      console.error('Error uploading file and metadata:', error);
+      alert('Upload failed: ' + error.message);
+    }
+
+    /*
+    console.log(`Title: ${title}, Description: ${description}, Media Type: ${uploadMediaType}`);
+    if (!file) {
+      alert('Please select a file to upload.');
+      return;
+    }
+
+    const metaData = new FormData();
+    metaData.append('file', file); 
+    metaData.append('title', title);
+    metaData.append('description', description);
+    metaData.append('mediaType', uploadMediaType);
+
+    try {
+      const response = await fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: metaData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Successful:', result);
+        closeModal();
+      } else {
+        console.error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
     // Logic to handle upload functionality
     // Close modal or navigate to next step
+    */
   };
 
   const handleBack = () => {
@@ -52,6 +135,7 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   };
 
   const handleFileInputChange = (e) => {
+    //setFile(e.target.files[0]);
     handleFileSelect(e);
   };
 
@@ -102,8 +186,12 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
                 className={styles.uploadMediaTypeSelect}
               >
                 <option value="">Select media type...</option>
-                <option value="photo">Photo</option>
-                <option value="video">Video</option>
+                <option value="cake">cake</option>
+                <option value="penguin">penguin</option>
+                <option value="waterfall">waterfall</option>
+                <option value="school">school</option>
+                <option value="finances">finances</option>
+                <option value="meme">meme</option>
               </select>
 
               <textarea
