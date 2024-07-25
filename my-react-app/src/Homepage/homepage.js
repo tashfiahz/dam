@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './homepage.module.css';
 import logo from './penguin.png';
 import UploadModal from './uploadModal'; // Import the UploadModal component
@@ -6,6 +7,33 @@ import UploadModal from './uploadModal'; // Import the UploadModal component
 function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [username, setUsername] = useState(null);
+
+  //GET USERNAME, PASS IT DOWN TO ANY COMPONENTS THAT MAKE REQUESTS TO THE BACKEND
+  const getUserName = async () => {
+    try {
+      const response = await fetch('http://localhost:3500/get_username', {
+        method: 'GET'
+      });
+      const data = await response.json();
+      if (data.emails && data.emails.length > 0) {
+        const email = data.emails[0];
+        setUsername(email);
+        console.log(email);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getUserName();
+  }, [])
+
+  const onLogOut = async () => {
+    await signOut();
+    window.location.href = "/auth";
+  }
 
   const handleSearch = () => {
     // Perform search functionality here
@@ -71,7 +99,10 @@ function HomePage() {
           </div>
         </div>
         <button className={styles.uploadButton} onClick={handleUploadButton}> + Upload</button>
-        {/* Content goes here */}
+        <div>
+          {username ? <h1>Hello, {username}</h1> : <h1>Loading...</h1>}
+        </div>
+        <li onClick={onLogOut}>Sign Out</li>
       </div>
 
       {/* Upload Modal */}
