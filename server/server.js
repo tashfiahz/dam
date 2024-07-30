@@ -4,13 +4,13 @@ import supertokens from "supertokens-node";
 import { SuperTokensConfig } from './config.js';
 import { verifySession } from "supertokens-node/recipe/session/framework/express"
 import { middleware, errorHandler } from "supertokens-node/framework/express";
-//import axios from 'axios';
+import axios from 'axios';
 import dotenv from 'dotenv';
-//import multer from 'multer'
+import multer from 'multer'
 //import { dirname, join } from 'path';
 //import { fileURLToPath } from 'url'; // Import to define __dirname in ESM
-//import { Storage } from '@google-cloud/storage';
-//import { MongoClient, ServerApiVersion } from 'mongodb';
+import { Storage } from '@google-cloud/storage';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ supertokens.init(SuperTokensConfig);
 
 const app = express();
 app.use(express.json());
-const port = 3500;
+const port = 3501;
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -40,31 +40,23 @@ app.get('/get_username', verifySession(), async (req, res) => {
     }
 })
 
-/*
 //const __dirname = path.dirname(__filename);
-const __dirname = dirname(fileURLToPath(import.meta.url));
+//const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const storage = new Storage({
-    keyFilename: join(__dirname, 'keys.json'), 
+    //keyFilename: join(__dirname, 'keys.json'),
+    keyFilename: 'keys.json', 
 });
-//IS THIS RIGHT? DOES CREATING 2 NEW STORAGES CAUSE A CRASH?
-const storageup = new Storage({
-    keyFilename: join(__dirname, 'keys.json'), 
-});
-const bucket_name = 'damcap';
-const bucket = storage.bucket(bucket_name); 
-const upload = multer({ storage: multer.memoryStorage() });
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 let db;
 async function connectToDatabase() {
     await client.connect();
-    db = client.db('test1');
-    db = db.collection('Coals');
+    db = client.db('test1').collection('Coals');
 }
 
-// Main function to start the server
+//Main function to start the server
 async function main() {
     try {
         await connectToDatabase();
@@ -78,6 +70,100 @@ async function main() {
 }
 main().catch(console.error);
 
+//Check if user already exists and has a GCS bucket, if not, create a new one
+app.post('/check-bucket', async (req, res) => {
+    const { username } = req.body;
+    const bucketName = username;
+    try {
+        const [buckets] = await storage.getBuckets();
+        const bucketExists = buckets.some(bucket => bucket.name === bucketName);
+        if (!bucketExists) {
+            await storage.createBucket(bucketName);
+            res.send({ message: `Bucket ${bucketName} created for new user`});
+        } 
+        else {
+            res.send({ message: `Bucket ${bucketName} already exists for user`});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error checking for/creating bucket', error });
+    }
+});
+
+app.post('/retrieve-projects', async (req, res) => {
+    const { username } = req.body;
+    try {
+        const result = await db.distinct('project', { username });
+        res.send(result.length ? result : []);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error retrieving projects', error });
+    }
+
+});
+
+app.post('/create-project' ,  async (req, res) => {
+    const { username, project } = req.body;
+    try {
+        const foundproject = await db.findOne({ username, project});
+
+        if (foundproject) {
+            res.send({ message: 'Project already exists' });
+        } 
+        else {
+            await db.insertOne({ username, project});
+            return res.send({ message: 'Project created successfully' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error uploading project', error });
+
+    }
+});
+
+app.post('/delete-project', async (req, res) => {
+    const { username, project } = req.body;
+    const bucketName = username;
+    try {
+        //Get all metadata for files in project, save their file names
+        const files = await db.find({ username, project }).toArray();
+        const filenames = files.map(file => file.name);
+        //Delete all metadata for files in project
+        await db.deleteMany({ username, project });
+        if (filenames.length > 0) {
+            //Create array of promises with each item being a promise for deleting a file from GCS
+            const deletions = filenames.map(name => storage.bucket(bucketName).file(name).delete());
+            //Wait for all promises to resolve
+            await Promise.all(deletions);
+        }
+        res.send({ message: 'Project and its files deleted from both MongoDB and GCS'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error deleting project', error });
+    }
+})
+
+app.post('/rename-project', async (req, res) => {
+    const { username, project, newproject } = req.body;
+    try {
+        const update = await db.updateMany(
+            { username: username, project: project },
+            { $set: { project: newproject }}
+        );
+        if (update.modifiedCount > 0) {
+            res.send({ message: 'Project renamed successfully'});
+        }
+        else {
+            res.status(404).send({ message: 'No entries found for given project name'});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error renaming project', error });
+    }
+})
+
+//------------------------------------MEDIA CRUD---------------------------------
+/*
 app.post('/upload-gcs', upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
@@ -109,6 +195,76 @@ app.post('/upload-mongo', async (req, res) => {
     }
 });
 
+app.post('/retrieve', async (req, res) => {
+    let retri = {};
+
+    //determines which of the fields were sent as a parameter
+    //avoids need for mutliple functions for if single param
+    //or multiple were sent
+    if(req.body.type){
+        retri.type = req.body.type;
+    }
+    if(req.body.name){
+        retri.name = req.body.name;
+    }
+    if(req.body.tag){
+        retri.tag = req.body.tag;
+    }
+
+    try {
+        const result = await coll.find(retri).toArray();
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ message: 'Error retrieving data and assets', error });
+    }
+
+});
+
+app.post('/update', async (req, res) => {
+    //add user 
+    const {url, name, description} = req.body;
+
+    try {
+        const result = await coll.updateOne(
+            {url},
+            {
+            //tag,
+                $set: {
+                    name,
+                    description
+                }
+            })
+        ;
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ message: 'Error updating the metadata', error });
+    }
+
+});
+
+app.post('/remove', async (req, res) => {
+    const {url} = req.body;
+    //const foundasset = await coll.findOne({url});
+    //await coll.deleteOne({_id: foundasset._id})
+    try{
+        const foundasset = await coll.findOne({url});
+
+        if (foundasset) {
+            await coll.deleteOne({_id: foundasset._id})
+            res.send({ message: 'Asset removed' });
+        } else {
+            res.status(500).send({ message: 'asset not found ' });
+        }
+
+    //gcs.bucket.remove
+    //await storage.bucket(bucketName).file(url).delete()
+    } catch (error) {
+        res.status(500).send({ message: 'Error deleting the metadata', error });
+
+    }
+});
+
+//---------------------------------------APIS------------------------------------
 async function generateV4ReadSignedURL(file_name) {
     const options = {
         version: 'v4',

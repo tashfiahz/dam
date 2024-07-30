@@ -7,17 +7,17 @@ import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
 import * as reactRouterDom from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import HomePage from './Homepage/homepage'; 
+import HomePage from './Homepage/homepage';
+import styles from './App.module.css'; 
 
 SuperTokens.init({
   appInfo: {
       appName: "dam.io",
-      apiDomain: "http://localhost:3500",
+      apiDomain: "http://localhost:3501",
       websiteDomain: "http://localhost:3000",
       apiBasePath: "/auth",
       websiteBasePath: "/auth",
   },
-  /*
   getRedirectionURL: async (context) => {
     if (context.action === "SUCCESS" && context.newSessionCreated) {
         if (context.redirectToPath !== undefined) {
@@ -25,15 +25,13 @@ SuperTokens.init({
             return context.redirectToPath;
         }
         if (context.createdNewUser) {
-            // user signed up
+            return "/homepage"
         } else {
-            // user signed in
+            return "/homepage"
         }
-        return "/homepage";
     }
     return undefined;
   },
-  */
   recipeList: [
       EmailPassword.init(),
       Session.init()
@@ -44,20 +42,23 @@ function App() {
   return (
     <SuperTokensWrapper>
       <Router>
-        {/*
-        <div className={styles.App}>
-          <header className={styles['App-header']}>
-            <div className={styles['title-container']}>
-              <div className={styles.circle}></div>
-              <Link to="/auth" className={styles.title}>DAM.IO</Link>
-            </div>
-          </header>
-        </div>
-        */}
         <Routes>
           {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [EmailPasswordPreBuiltUI])}
           <Route 
-            path="/" 
+            path="/"
+            element={
+              <div className={styles.App}>
+                <header className={styles['App-header']}>
+                  <div className={styles['title-container']}>
+                    <div className={styles.circle}></div>
+                    <Link to="/auth" className={styles.title}>DAM.IO</Link>
+                  </div>
+                </header>
+              </div>
+            }
+          />
+          <Route 
+            path="/homepage" 
             element={
               <SessionAuth>
                 <HomePage />
