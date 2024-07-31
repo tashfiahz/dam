@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './homepage.module.css';
 import logo from './penguin.png';
-import UploadModal from './uploadModal'; // Import the UploadModal component
+import UploadModal from './UploadModal/uploadModal';
 
 function HomePage() {
   /*

@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap');
+
+.container {
+  display: flex;
+  font-family: 'Jura', sans-serif;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8860D0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.homePagetitle {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.homePageLogo {
+  mix-blend-mode: multiply;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 230px;
+}
+
+.imageContainer {
+  text-align: center;
+}
+
+.mainImage {
+  width: 100%;
+  max-width: 600px;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.row label {
+  margin-right: 10px;
+  color: black;
+}
+
+.titleInput, .descriptionInput {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.typeButton, .projectButton, .saveButton, .selectButton {
+  background-color: #84CEEB;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.typeButton:hover, .projectButton:hover, .saveButton:hover, .selectButton:hover {
+  background-color: #5680E9;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tagButton {
+  background-color: #84CEEB;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.selectedTag {
+  background-color: #5680E9;
+}
+
+.descriptionContainer {
+  margin-top: 10px;
+}
+
+.similarImagesContainer {
+  margin-top: 10px;
+}
+
+.similarImages {
+  display: flex;
+  gap: 10px;
+}
+
+.similarImages img {
+  width: 150px;
+  height: 150px;
+}
+
+.saveButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
