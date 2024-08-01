@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap');
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../background.jpg'); /* Adjust the path as needed */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-family: 'Jura', sans-serif;
+  font-size: 4rem;
+  color: white;
+  animation: slideIn 3s ease-in-out;
+  z-index: 10;
+  text-decoration: none;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.circle {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border: 50px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: spin 5s linear infinite, glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
+  }
+  to {
+    box-shadow: 0 0 20px 10px rgba(255, 255, 255, 1);
+  }
+}

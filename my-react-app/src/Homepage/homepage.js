@@ -1,138 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { signOut } from "supertokens-auth-react/recipe/session";
+import React, { useState } from 'react';
 import styles from './homepage.module.css';
+import { Link } from 'react-router-dom';
 import logo from './penguin.png';
-import UploadModal from './uploadModal'; // Import the UploadModal component
+import UploadModal from './UploadModal/uploadModal'; 
 
 function HomePage() {
-  /*
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  */
-  const [username, setUsername] = useState(null);
-  const [projects, setProjects] = useState([]);
-
-  //GET USERNAME, PASS IT DOWN TO ANY COMPONENTS THAT MAKE REQUESTS TO THE BACKEND
-  const getUserName = async () => {
-    try {
-      const response = await fetch('http://localhost:3501/get_username', {
-        method: 'GET'
-      });
-      const data = await response.json();
-      if (data.emails && data.emails.length > 0) {
-        const email = data.emails[0];
-        const user = email.split('@')[0];
-        setUsername(user);
-        return user;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const checkBucket = async (user) => {
-    try {
-      await fetch('http://localhost:3501/check-bucket', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: user }),
-      });
-    } catch (error) {
-      console.error(error)
-    }
-  };
-
-  const getProjects = async (user) => {
-    try {
-      const response = await fetch('http://localhost:3501/retrieve-projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: user }),
-      });
-      const data = await response.json();
-      setProjects(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    const handleFirstLogin = async () => {
-      const user = await getUserName();
-      if (user) {
-        await checkBucket(user);
-        await getProjects(user);
-      }
-    };
-    handleFirstLogin();
-  }, [])
-
-  const onLogOut = async () => {
-    await signOut();
-    window.location.href = "/auth";
-  }
-
-  const handleCreateProject = async () => {
-    const projectname = prompt("Enter new project name:");
-    if (projectname) {
-      try {
-        await fetch('http://localhost:3501/create-project', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, project: projectname }),
-        });
-        setProjects((prevprojects) => [...prevprojects, projectname]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
-  const handleDeleteProject = async (projectname) => {
-    try {
-      await fetch('http://localhost:3501/delete-project', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, project: projectname }),
-      });
-      setProjects((prevprojects) => prevprojects.filter((project) => project !== projectname));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleRenameProject = async (oldprojectname) => {
-    const newprojectname = prompt("Enter new project name:");
-    if (newprojectname) {
-      try {
-        await fetch('http://localhost:3501/rename-project', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, project: oldprojectname, newproject: newprojectname}),
-        });
-        setProjects((prevprojects) => prevprojects.map((project) => (project === oldprojectname ? newprojectname : project)));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
 
   const handleSearch = () => {
     // Perform search functionality here
     console.log('Searching...');
   };
 
-  /*
   const openModal = () => {
     setModalOpen(true);
   };
@@ -154,37 +34,26 @@ function HomePage() {
 
   const handleFile = (file) => {
     setSelectedFile(file);
-    closeModal(); // Close modal after selecting the file 
-    // Handle further processing of the file (e.g., upload to server, display preview, etc.)
+    closeModal(); // Close modal after selecting the file (you can adjust this behavior as needed)
+    // Handle further processing of the file 
     console.log('Selected file:', file);
   };
 
   const handleUploadButton = () => {
     openModal(); // Open the modal when Upload button is clicked
   };
-  */
 
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
-        <img src={logo} alt="Logo" className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
-        <h1 className={styles.homePagetitle}>DAM.IO</h1>
-        {/*}
-          <div className={styles.filterSection}>
-            <h2>Media:</h2>
-            <label htmlFor="photo">
-              <input type="checkbox" id="photo" name="photo" />
-              Photo
-            </label>
-            <label htmlFor="video">
-              <input type="checkbox" id="video" name="video" />
-              Video
-            </label>
-          </div>
-        */}
+        <img src={logo} alt='Logo' className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
+        <h1 className={styles.homePagetitle}>
+          <Link to="/homepage" className={styles.homePagetitleLink}>DAM.IO</Link>
+        </h1>
+        <Link to='/Projects' className={styles.projectsTab}>Projects</Link>
       </div>
-      <div className={styles.mainContent}>
-        <div className={styles.header}>
+      <div className={styles.content}>
+        <div className={styles.centeredContainer}>
           <div className={styles.searchBar}>
             <input type="text" placeholder="Search..." />
             <button className={styles.searchButton} onClick={handleSearch}>
@@ -193,58 +62,27 @@ function HomePage() {
               </svg>
             </button>
           </div>
-          <li className={styles.signOut} onClick={onLogOut}>Sign Out</li>
         </div>
-      <div className={styles.content}>
-        {/*}
         <button className={styles.uploadButton} onClick={handleUploadButton}> + Upload</button>
-        */}
-        <div>
-            {username ? <h1>Hello, {username}</h1> : <h1>Loading...</h1>}
+        
+        <div className={styles.imageContainer}>
+          <Link to='/photodetails'>
+            <img src="https://via.placeholder.com/200x100" alt="Main" className={styles.mainImage} />
+          </Link>
+          <Link to="/videodetails">
+            <img src="https://via.placeholder.com/200x100" alt="Test" className={styles.mainImage} style={{ marginTop: '20px' }} />
+          </Link>
         </div>
-        {projects.length > 0 ? (
-          <>
-          <div className={styles.tableContainer}>
-            <table>
-              <thead>
-                <tr>
-                  <th className={styles.projectNameColumn}>Project Name</th>
-                  <th className={styles.actionColumn}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((project) => (
-                  <tr key={project}>
-                    <td>{project}</td>
-                    <td>
-                      <button onClick={() => handleRenameProject(project)}>Rename</button>
-                      <button onClick={() => handleDeleteProject(project)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <button className={styles.createProjectButton} onClick={handleCreateProject}> + Create Project</button>
-          </>
-          ) : (
-            <div className={styles.noProjects}>
-              <p>No projects, click Create Project to get started</p>
-              <button className={styles.createProjectButtonCenter} onClick={handleCreateProject}> + Create Project</button>
-            </div>
-          )}
-        </div>
+
+        {/* Upload Modal */}
+        {modalOpen && (
+          <UploadModal
+            closeModal={closeModal}
+            handleFileDrop={handleFileDrop}
+            handleFileSelect={handleFileSelect}
+          />
+        )}
       </div>
-      {/* Upload Modal */}
-      {/*}
-      {modalOpen && (
-        <UploadModal
-          closeModal={closeModal}
-          handleFileDrop={handleFileDrop}
-          handleFileSelect={handleFileSelect}
-        />
-      )}
-      */}
     </div>
   );
 }

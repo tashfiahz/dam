@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "supertokens-auth-react": "^0.44.0"
+  }
+}

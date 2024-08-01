@@ -1,41 +1,45 @@
 import React from 'react';
-import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react";
-import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
-import Session from "supertokens-auth-react/recipe/session";
-import { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react/ui";
-import { SessionAuth } from "supertokens-auth-react/recipe/session";
+import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react';
+import EmailPassword from 'supertokens-auth-react/recipe/emailpassword';
+import Session from 'supertokens-auth-react/recipe/session';
+import { getSuperTokensRoutesForReactRouterDom } from 'supertokens-auth-react/ui';
+import { SessionAuth } from 'supertokens-auth-react/recipe/session';
 import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
-import * as reactRouterDom from "react-router-dom";
+import * as reactRouterDom from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './Homepage/homepage';
-import styles from './App.module.css'; 
+import styles from './App.module.css';
+import PhotoDetails from './Homepage/PhotoDetails/photodetails';
+import VideoDetails from './Homepage/VideoDetails/videodetails';
+import LandingPage from './LandingPage/landingpage';
+import Projects from './Projects/projects';
 
 SuperTokens.init({
   appInfo: {
-      appName: "dam.io",
-      apiDomain: "http://localhost:3501",
-      websiteDomain: "http://localhost:3000",
-      apiBasePath: "/auth",
-      websiteBasePath: "/auth",
+    appName: 'dam.io',
+    apiDomain: 'http://localhost:3501',
+    websiteDomain: 'http://localhost:3000',
+    apiBasePath: '/auth',
+    websiteBasePath: '/auth',
   },
   getRedirectionURL: async (context) => {
-    if (context.action === "SUCCESS" && context.newSessionCreated) {
-        if (context.redirectToPath !== undefined) {
-            // we are navigating back to where the user was before they authenticated
-            return context.redirectToPath;
-        }
-        if (context.createdNewUser) {
-            return "/homepage"
-        } else {
-            return "/homepage"
-        }
+    if (context.action === 'SUCCESS' && context.newSessionCreated) {
+      if (context.redirectToPath !== undefined) {
+        // we are navigating back to where the user was before they authenticated
+        return context.redirectToPath;
+      }
+      if (context.createdNewUser) {
+        return '/homepage';
+      } else {
+        return '/homepage';
+      }
     }
     return undefined;
   },
   recipeList: [
-      EmailPassword.init(),
-      Session.init()
-  ]
+    EmailPassword.init(),
+    Session.init(),
+  ],
 });
 
 function App() {
@@ -45,7 +49,7 @@ function App() {
         <Routes>
           {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [EmailPasswordPreBuiltUI])}
           <Route 
-            path="/"
+            path="/" 
             element={
               <div className={styles.App}>
                 <header className={styles['App-header']}>
@@ -65,6 +69,10 @@ function App() {
               </SessionAuth>
             } 
           />
+          <Route path="/landingpage" element={<LandingPage />} />
+          <Route path="/photodetails" element={<PhotoDetails />} />
+          <Route path="/videodetails" element={<VideoDetails />} />
+          <Route path="/projects" element={<Projects/>} />
         </Routes>
       </Router>
     </SuperTokensWrapper>
