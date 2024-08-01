@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap');
+
+.container {
+  display: flex;
+  font-family: 'Jura', sans-serif;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px;
+  font-family: 'Jura', sans-serif;
+  margin-left: 230px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #8860D0;
+}
+
+.homePagetitle {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: white;
+  position: relative;
+}
+
+.homePagetitle::after {
+  content: '';
+  display: block;
+  width: 80%; /* Adjust as needed */
+  height: 2px; /* Adjust thickness of the underline */
+  background-color: white; /* Color of the underline */
+  margin: 10px auto 0; /* Center the underline and adjust spacing */
+}
+
+
+.homePageLogo {
+  mix-blend-mode: multiply;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+
+.sidebar {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8860D0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.createProjectButton {
+  background-color: #84CEEB; 
+  border: none;
+  color: white;
+  font-size: large;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Jura', sans-serif;
+  text-align: center;
+  margin: 20px 0;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.createProjectButtonCenter {
+  background-color: #84CEEB; 
+  border: none;
+  color: white;
+  font-size: large;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Jura', sans-serif;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.createProjectButton:hover {
+  background-color: #5680E9; 
+}
+
+.tableContainer {
+  margin-bottom: 100px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #8860D0;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #ddd;
+}
+
+table .projectNameColumn {
+  width: 80%;
+}
+
+table .actionColumn {
+  width: 20%;
+}
+
+table tr td button {
+  background-color: #84CEEB;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+table tr td button:hover {
+  background-color: #5680E9;
+}
+
+.noProjects {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.noProjects p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}

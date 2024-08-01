@@ -10,7 +10,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './Homepage/homepage';
 import styles from './App.module.css';
 import PhotoDetails from './Homepage/PhotoDetails/photodetails';
+import VideoDetails from './Homepage/VideoDetails/videodetails';
 import LandingPage from './LandingPage/landingpage';
+import Projects from './Projects/projects';
 
 SuperTokens.init({
   appInfo: {
@@ -69,6 +71,8 @@ function App() {
           />
           <Route path="/landingpage" element={<LandingPage />} />
           <Route path="/photodetails" element={<PhotoDetails />} />
+          <Route path="/videodetails" element={<VideoDetails />} />
+          <Route path="/projects" element={<Projects/>} />
         </Routes>
       </Router>
     </SuperTokensWrapper>

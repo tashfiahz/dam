@@ -1,11 +1,10 @@
-
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,10 +13,10 @@
 .uploadModal {
   background-color: white;
   width: 80%;
-  max-width: 600px; /* Adjust maximum width as needed */
+  max-width: 600px;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .modalHeader {
@@ -46,7 +45,7 @@
 }
 
 .modalNextButton {
-  background-color:  #84CEEB; /* Light blue background */
+  background-color: #84CEEB;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -56,7 +55,7 @@
 }
 
 .modalUploadButton {
-  background-color:  #84CEEB; /* Light blue background */
+  background-color: #84CEEB;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -69,29 +68,29 @@
   border: none;
   border-radius: 50%;
   padding: 10px;
-  width: 40px; 
+  width: 40px;
   height: 40px;
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   display: inline-flex;
   justify-content: center;
   align-items: center;
 }
 
 .backButton:hover {
-  background-color: #5680E9; /* Darker blue on hover */
+  background-color: #5680E9;
 }
 
 .modalNextButton:hover {
-  background-color: #5680E9; /* Gradient dark purple */
+  background-color: #5680E9;
 }
 
 .lightBlueButton {
-  background-color: #84CEEB; /* Light blue background */
+  background-color: #84CEEB;
   color: white;
 }
 
 .lightBlueButton:hover {
-  background-image: #5680E9; /* Gradient dark purple */
+  background-image: #5680E9;
 }
 
 .initialStage {
@@ -111,10 +110,9 @@
 
 .dragFileChange {
   opacity: 0.35;
-  background-color: #5AB9EA; /* Background color when dragged over */
-  border-color: #5680E9; /* Border color when dragged over */
+  background-color: #5AB9EA;
+  border-color: #5680E9;
 }
-
 
 .titleInput, .descriptionTextarea, .uploadMediaTypeSelect {
   width: 100%;
@@ -125,7 +123,6 @@
   font-size: 16px;
   font-family: Arial;
 }
-
 
 .titleInput:focus,
 .descriptionTextarea:focus,
@@ -150,11 +147,11 @@
 }
 
 .uploadIcon {
-  width: 70px; 
-  height: auto; 
-  margin-bottom: 10px;  
-  margin-left: 90px; 
-  display: block; 
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+  margin-left: 90px;
+  display: block;
 }
 
 .mediaTypeSelect {
@@ -166,5 +163,3 @@
   border-radius: 4px;
   font-size: 1rem;
 }
-
-

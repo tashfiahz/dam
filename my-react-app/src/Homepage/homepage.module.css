@@ -5,7 +5,7 @@
   font-family: 'Jura', sans-serif;
   background-color: white;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .sidebar {
@@ -24,7 +24,7 @@
   padding: 6px 6px 6px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: white; 
   display: block;
 }
 
@@ -46,6 +46,16 @@
   text-align: center;
   margin-bottom: 10px;
   color: white;
+  position: relative;
+}
+
+.homePagetitle::after {
+  content: '';
+  display: block;
+  width: 60%; 
+  height: 2px; /* Adjust thickness of the underline */
+  background-color: white; /* Color of the underline */
+  margin: 15px auto 0; /* Center the underline and adjust spacing */
 }
 
 .homePageLogo {
@@ -56,55 +66,45 @@
   width: 50%;
 }
 
-label {
+.projectsTab {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 20px;
   display: block;
-  margin-top: 10px;
-  color: white; /* Set text color to white */
+  margin-top: 10px; 
+  color: white; 
 }
 
-input[type="checkbox"] {
-  margin-right: 5px;
+.projectsTab:hover {
+  color: #f1f1f1; 
 }
 
-.mainContent {
-  flex: 1;
-  padding: 20px;
-  margin-left: 230px;
-}
-
-.header {
+.centeredContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #8860D0;
+  justify-content: flex-end;
+  width: 100%;
 }
+
 
 .searchBar {
-  display: flex; /* Enables flexbox layout */
-  align-items: center; /* Centers items vertically */
-  border: 2px solid black; 
-  border-radius: 40px; /* Adjusts the roundness of the search bar */
-  padding: 5px 10px; /* Adjusts the padding inside the search bar */
-  position: relative; 
-  width: 100%; /* Adjust this value to set the width of the search bar */
-  max-width: 600px;
-  /*
-  margin: 0 auto;
-  top: 5px;
-  left: -500px;
-  */
+  display: flex;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 40px;
+  padding: 5px 10px;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin-left: 30px;
 }
 
 .searchBar input {
   flex-grow: 1;
-  /*
-  flex-shrink: 0; 
+  flex-shrink: 0;
   flex-basis: 70%;
-  */
-  border: none; 
+  border: none;
   outline: none;
-  padding: 10px; /* Adjusts the padding inside the input field */
+  padding: 10px;
   font-family: 'Jura', sans-serif;
 }
 
@@ -112,128 +112,51 @@ input[type="checkbox"] {
   background-color: transparent;
   border: none;
   color: #8860D0;
-  font-size: 1.2rem; /* Adjust the value to change the size of the button */
+  font-size: 1.2rem;
   cursor: pointer;
-  position: absolute; /* Position the button absolutely */
-  right: 10px; /* Adjust the value to position the button from the right edge */
+  position: absolute;
+  right: 10px;
 }
 
-.signOut {
-  list-style: none;
-  cursor: pointer;
-  color: white;
-  margin: 0;
-}
 
-.signOut:hover {
-  text-decoration: underline;
-}
 
 .content {
   flex: 1;
   padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  position: relative;
+  margin-left: 230px; /* Align content to the right of the sidebar */
 }
 
-.createProjectButton {
+.centeredContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px; 
+}
+
+
+.uploadButton {
   background-color: #84CEEB; 
   border: none;
   color: white;
   font-size: large;
-  padding: 15px 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Jura', sans-serif;
-  text-align: center;
-  margin: 20px 0;
-  position: absolute;
-  bottom: 20px;
-  right: 20px
-  /*
   margin-left: 800px;
-  */
-}
-
-.createProjectButtonCenter {
-  background-color: #84CEEB; 
-  border: none;
-  color: white;
-  font-size: large;
-  padding: 15px 30px;
+  padding: 20px 45px;
   border-radius: 5px;
   cursor: pointer;
   font-family: 'Jura', sans-serif;
-  text-align: center;
-  margin: 20px 0;
 }
 
-.createProjectButton:hover {
+.uploadButton:hover {
   background-color: #5680E9; 
 }
 
-.tableContainer {
-  margin-bottom: 100px;
+.imageContainer {
+  position: relative;
+  margin-bottom: 0px; /* Adjust this value to move the image further down */
+  margin-left: 30px; /* Adjust this value to move the image more to the left */
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.mainImage {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
-
-table th,
-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-table th {
-  background-color: #8860D0;
-  color: white;
-}
-
-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-table tr:hover {
-  background-color: #ddd;
-}
-
-table .projectNameColumn {
-  width: 80%;
-}
-
-table .actionColumn {
-  width: 20%;
-}
-
-table tr td button {
-  background-color: #84CEEB;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-table tr td button:hover {
-  background-color: #5680E9;
-}
-
-.noProjects {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.noProjects p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
-
