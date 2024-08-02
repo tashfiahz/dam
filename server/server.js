@@ -186,14 +186,16 @@ app.post('/upload-gcs', upload.single('file'), async (req, res) => {
 });
   
 app.post('/upload-mongo', async (req, res) => {
-    const { tag, type, name, description, url } = req.body;
+    const { tag, type, name, description, url, project} = req.body;
     try {
-        const result = await db.insertOne({ tag, type, name, description, url });
+        const result = await db.insertOne({ tag, type, name, description, url, project });
         res.send(result);
     } catch (error) {
         res.status(500).send({ message: 'Error inserting data', error });
     }
 });
+
+
 
 app.post('/retrieve', async (req, res) => {
     let retri = {};
