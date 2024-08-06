@@ -32,6 +32,15 @@
   color: #f1f1f1;
 }
 
+.filterSection {
+  margin-top: 10px;
+  padding-left: 10px; /* Adjust this value to move the text to the right */
+}
+
+.filterSection h2 {
+  color: white;
+}
+
 .homePagetitle {
   font-size: 2rem;
   text-align: center;
@@ -45,6 +54,16 @@
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: white; /* Set text color to white */
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
 }
 
 .mainContent {
@@ -119,26 +138,7 @@
   position: relative;
 }
 
-.createProjectButton {
-  background-color: #84CEEB; 
-  border: none;
-  color: white;
-  font-size: large;
-  padding: 15px 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Jura', sans-serif;
-  text-align: center;
-  margin: 20px 0;
-  position: absolute;
-  bottom: 20px;
-  right: 20px
-  /*
-  margin-left: 800px;
-  */
-}
-
-.createProjectButtonCenter {
+.uploadButton {
   background-color: #84CEEB; 
   border: none;
   color: white;
@@ -151,71 +151,107 @@
   margin: 20px 0;
 }
 
-.createProjectButton:hover {
+.uploadButton:hover {
   background-color: #5680E9; 
 }
 
-.tableContainer {
-  margin-bottom: 100px;
+.uploadButtonRight {
+  background-color: #84CEEB; 
+  border: none;
+  color: white;
+  font-size: large;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Jura', sans-serif;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 
-table {
+.uploadButtonRight:hover {
+  background-color: #5680E9; 
+}
+
+.mediaGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  position: relative;
+}
+
+.mediaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  max-height: 200px;
+  justify-content: space-between;
+}
+
+.thumbnailContainer {
   width: 100%;
-  border-collapse: collapse;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoThumbnail {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.emptyMessage {
+  text-align: center;
   margin-top: 20px;
 }
 
-table th,
-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-table th {
-  background-color: #8860D0;
+.sortSection {
+  margin-top: 20px;
   color: white;
 }
 
-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-table tr:hover {
-  background-color: #ddd;
-}
-
-table .projectNameColumn {
-  width: 80%;
-}
-
-table .actionColumn {
-  width: 20%;
-}
-
-table tr td button {
-  background-color: #84CEEB;
+.sortSection select {
+  display: block;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
   border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-family: 'Jura', sans-serif;
 }
 
-table tr td button:hover {
-  background-color: #5680E9;
-}
-
-.noProjects {
+.mediaName {
+  margin-top: 10px;
   text-align: center;
-  margin-top: 50px;
 }
 
-.noProjects p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
+.uploadButtonContiainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
-
 

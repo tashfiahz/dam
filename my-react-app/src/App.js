@@ -8,6 +8,7 @@ import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpass
 import * as reactRouterDom from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './Homepage/homepage';
+import ProjectPage from './ProjectPage/projectpage';
 import styles from './App.module.css'; 
 
 SuperTokens.init({
@@ -30,7 +31,7 @@ SuperTokens.init({
             return "/homepage"
         }
     }
-    return undefined;
+    return "/homepage";
   },
   recipeList: [
       EmailPassword.init(),
@@ -62,6 +63,14 @@ function App() {
             element={
               <SessionAuth>
                 <HomePage />
+              </SessionAuth>
+            } 
+          />
+          <Route 
+            path="/:projectname" 
+            element={
+              <SessionAuth>
+                <ProjectPage />
               </SessionAuth>
             } 
           />

@@ -19,6 +19,7 @@ supertokens.init(SuperTokensConfig);
 const app = express();
 app.use(express.json());
 const port = 3501;
+const upload = multer();
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -29,7 +30,7 @@ app.use(cors({
 
 app.use(middleware());
 
-app.get('/get_username', verifySession(), async (req, res) => {
+app.get('/get_user_info', verifySession(), async (req, res) => {
     try {
         let userId = req.session.getUserId();
         let userInfo = await supertokens.getUser(userId);
@@ -72,8 +73,8 @@ main().catch(console.error);
 
 //Check if user already exists and has a GCS bucket, if not, create a new one
 app.post('/check-bucket', async (req, res) => {
-    const { username } = req.body;
-    const bucketName = username;
+    const { userId } = req.body;
+    const bucketName = userId;
     try {
         const [buckets] = await storage.getBuckets();
         const bucketExists = buckets.some(bucket => bucket.name === bucketName);
@@ -91,9 +92,9 @@ app.post('/check-bucket', async (req, res) => {
 });
 
 app.post('/retrieve-projects', async (req, res) => {
-    const { username } = req.body;
+    const { userId } = req.body;
     try {
-        const result = await db.distinct('project', { username });
+        const result = await db.distinct('project', { userId });
         res.send(result.length ? result : []);
     } catch (error) {
         console.error(error);
@@ -103,15 +104,14 @@ app.post('/retrieve-projects', async (req, res) => {
 });
 
 app.post('/create-project' ,  async (req, res) => {
-    const { username, project } = req.body;
+    const { userId, project } = req.body;
     try {
-        const foundproject = await db.findOne({ username, project});
-
+        const foundproject = await db.findOne({ userId, project});
         if (foundproject) {
             res.send({ message: 'Project already exists' });
         } 
         else {
-            await db.insertOne({ username, project});
+            await db.insertOne({ userId, project});
             return res.send({ message: 'Project created successfully' });
         }
     } catch (error) {
@@ -122,14 +122,15 @@ app.post('/create-project' ,  async (req, res) => {
 });
 
 app.post('/delete-project', async (req, res) => {
-    const { username, project } = req.body;
-    const bucketName = username;
+    const { userId, project } = req.body;
+    const bucketName = userId;
     try {
         //Get all metadata for files in project, save their file names
-        const files = await db.find({ username, project }).toArray();
+        const files = await db.find({ userId, project }).toArray();
         const filenames = files.map(file => file.name);
         //Delete all metadata for files in project
-        await db.deleteMany({ username, project });
+        await db.deleteMany({ userId, project });
+        console.log(filenames);
         if (filenames.length > 0) {
             //Create array of promises with each item being a promise for deleting a file from GCS
             const deletions = filenames.map(name => storage.bucket(bucketName).file(name).delete());
@@ -144,10 +145,10 @@ app.post('/delete-project', async (req, res) => {
 })
 
 app.post('/rename-project', async (req, res) => {
-    const { username, project, newproject } = req.body;
+    const { userId, project, newproject } = req.body;
     try {
         const update = await db.updateMany(
-            { username: username, project: project },
+            { userId: userId, project: project },
             { $set: { project: newproject }}
         );
         if (update.modifiedCount > 0) {
@@ -162,38 +163,92 @@ app.post('/rename-project', async (req, res) => {
     }
 })
 
-//------------------------------------MEDIA CRUD---------------------------------
-/*
 app.post('/upload-gcs', upload.single('file'), async (req, res) => {
+    const { userId } = req.body;
+    const bucketName = userId;
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
-  
+    const bucket = storage.bucket(bucketName);
     const file = bucket.file(req.file.originalname);
     const fileStream = file.createWriteStream({ resumable: false });
-  
     fileStream.on('finish', async () => {
-        const url = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+        //Instead of having GCS return authenticated URL (needs Google login to access), have it return long-lasting signed URL
+        const expiration = new Date();
+        expiration.setFullYear(expiration.getFullYear() + 10);
+        const [url] = await file.getSignedUrl({
+            action: 'read',
+            expires: expiration
+        });
         res.status(200).json({ url });
     });
-  
     fileStream.on('error', (err) => {
         console.error('File stream error:', err);
         res.status(500).json({ message: 'File upload failed', error: err.message });
     });
-  
     fileStream.end(req.file.buffer);
 });
-  
+
 app.post('/upload-mongo', async (req, res) => {
-    const { tag, type, name, description, url } = req.body;
+    const { userId, projectname, filetype, filename, url } = req.body;
+    const metadata = {
+        project: projectname,
+        description: "",
+        name: filename,
+        tags: [],
+        type: filetype,
+        url: url,
+        userId: userId
+    };
     try {
-        const result = await db.insertOne({ tag, type, name, description, url });
-        res.send(result);
+        const result = await db.insertOne(metadata);
+        res.status(200).send(result);
     } catch (error) {
         res.status(500).send({ message: 'Error inserting data', error });
     }
 });
+
+app.post('/retrieve' ,  async (req, res) => {
+    const{ type, name, tag, projectname, userId } = req.body;
+    let retri = { userId };
+    //determines which of the fields were sent as a parameter
+    //avoids need for mutliple functions for if single param
+    //or multiple were sent
+    if (type) {
+        retri.type = type;
+    }
+    if (name) {
+        retri.name = name;
+    }
+    if (tag) {
+        retri.tags = { $elemMatch: { $eq: tag } };
+    }
+    if (projectname) {
+        retri.project = projectname;
+    }
+    try {
+        const result = await db.find({
+            ...retri,
+            //Only get metadata that has all fields. Ignore metadata that is just userId and project fields that is added when a user creates an empty project
+            $or: [
+                { description: { $exists: true }},
+                { tags: { $exists: true }},
+                { name: { $exists: true }},
+                { type: { $exists: true }},
+                { url: { $exists: true }},
+            ]
+        }).toArray();
+        res.send(result);
+    } catch (error) {
+        res.status(500).send({ message: 'Error retrieving data and assets', error });
+    }
+});
+
+//------------------------------------MEDIA CRUD---------------------------------
+/*
+
+  
+
 
 app.post('/retrieve', async (req, res) => {
     let retri = {};

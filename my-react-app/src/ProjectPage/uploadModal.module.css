@@ -49,20 +49,26 @@
   background-color:  #84CEEB; /* Light blue background */
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: .9rem;
+  text-align: center;
   cursor: pointer;
   margin-left: 450px;
+  font-family: 'Jura', sans-serif;
 }
 
 .modalUploadButton {
   background-color:  #84CEEB; /* Light blue background */
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: large;
+  text-align: center;
   cursor: pointer;
-  margin-left: 500px;
+  margin-left: 450px;
+  font-family: 'Jura', sans-serif;
 }
 
 .backButton {
@@ -165,6 +171,18 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.fileInfo {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 400px;
+  font-family: 'Jura' sans-serif;
+  text-align: left;
 }
 
 
