@@ -1,0 +1,8 @@
+{
+    "name": "damio-full",
+    "version": "1.0.0",
+    "scripts": {
+      "build": "npm install --prefix my-react-app && npm install --prefix server && npm run build --prefix my-react-app",
+      "start": "node server/server.js"
+    }
+  }
