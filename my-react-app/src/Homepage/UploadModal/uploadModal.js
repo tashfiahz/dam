@@ -50,7 +50,6 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
     fileData.append('file', file);
 
     try {
-      // Step 1: Upload the file to GCS and get the URL
       const filegcs = await fetch('http://localhost:3500/upload-gcs', {
         method: 'POST',
         body: fileData,
@@ -64,7 +63,6 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
 
       const { url: fileUrl } = await filegcs.json();
 
-      // Step 2: Collect metadata and send it to MongoDB
       const metadata = {
         tag: title,
         type: uploadMediaType,
@@ -92,38 +90,7 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
       alert('Upload failed: ' + error.message);
     }
 
-    /*
-    console.log(`Title: ${title}, Description: ${description}, Media Type: ${uploadMediaType}`);
-    if (!file) {
-      alert('Please select a file to upload.');
-      return;
-    }
 
-    const metaData = new FormData();
-    metaData.append('file', file); 
-    metaData.append('title', title);
-    metaData.append('description', description);
-    metaData.append('mediaType', uploadMediaType);
-
-    try {
-      const response = await fetch('http://localhost:5000/upload', {
-        method: 'POST',
-        body: metaData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Successful:', result);
-        closeModal();
-      } else {
-        console.error('Upload failed');
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
-    // Logic to handle upload functionality
-    // Close modal or navigate to next step
-    */
   };
 
   const handleBack = () => {
