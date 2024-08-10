@@ -6,15 +6,15 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   const [uploadStage, setUploadStage] = useState(1);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [isDraggingOver, setIsDraggingOver] = useState(false); // State to track drag over state
-  const [uploadMediaType, setUploadMediaType] = useState(''); // New state for the drop-down
+  const [isDraggingOver, setIsDraggingOver] = useState(false); 
+  const [uploadMediaType, setUploadMediaType] = useState(''); 
   const [file, setFile] = useState(null);
 
   const handleFileDropEvent = (e) => {
     e.preventDefault();
     setIsDraggingOver(false);
     handleFileDrop(e);
-    //  setFile(e.dataTransfer.files[0]); // Set the file state when a file is dropped
+
   };
 
   const handleDragEnter = (e) => {
@@ -98,11 +98,10 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
   };
 
   const handleFileSelectClick = () => {
-    document.getElementById('fileInput').click(); // Click the file input element
+    document.getElementById('fileInput').click(); 
   };
 
   const handleFileInputChange = (e) => {
-    //setFile(e.target.files[0]);
     handleFileSelect(e);
   };
 
@@ -124,7 +123,7 @@ function UploadModal({ closeModal, handleFileDrop, handleFileSelect }) {
                 onDragOver={handleDragEnter}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
-                onClick={handleFileSelectClick} // Open file selection on click
+                onClick={handleFileSelectClick} 
               >
                 <img src={uploadImage} alt="Upload Icon" className={styles.uploadIcon} />
                 <u>Click here</u> or drag and drop
