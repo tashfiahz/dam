@@ -272,7 +272,7 @@ async function generateV4ReadSignedURL(bucket_name, file_name) {
 }
 
 //LIMIT TESTING TO PRESERVE MONTHLY REQUESTS
-app.get('/audio_recognition', async (req, res) => {
+app.post('/audio_recognition', async (req, res) => {
     const audio_api = 'https://enterprise.audd.io/';
     const audio_api_key = process.env.AUDIO_API_KEY;
     const { userId, name } = req.body
