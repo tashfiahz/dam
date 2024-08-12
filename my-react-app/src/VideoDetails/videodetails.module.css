@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&display=swap');
+
+.container {
+  display: flex;
+  font-family: 'Jura', sans-serif;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  height: 100%;
+  width: 230px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8860D0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  padding: 6px 6px 6px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.homePagetitle {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.homePageLogo {
+  mix-blend-mode: multiply;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 230px;
+}
+
+.imageContainer {
+  text-align: center;
+  margin-left: -500px;
+}
+
+.mainImage {
+  width: 100%;
+  max-width: 600px;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 750px;
+  margin-top: -400px;
+}
+
+.title, .type {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title label, .type label {
+  margin-right: 10px;
+  color: black;
+}
+
+.titleInput {
+  width: 100%;
+  max-width: 1000px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.dropdown {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.projectsw {
+  margin-bottom: 20px;
+}
+
+.projectsw label {
+  color: black;
+}
+
+.descriptionContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1115px;
+  margin-top: 55px;
+  margin-left: 40px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.descriptionContainer label {
+  margin-bottom: 10px;
+  color: black;
+}
+
+.descriptionInput {
+  width: 100%;
+  max-width: 1115px;
+  height: 180px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.wordCount {
+  margin-top: 10px;
+  color: black;
+}
+
+.matchingAudioContainer {
+  display: flex;
+  align-items: center;
+  max-width: 1063px;
+  background-color: #5680E9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.audioImage {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.audioImage img {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.audioDetails {
+  flex: 2;
+}
+
+.audioDetails div {
+  margin-bottom: 10px;
+}
+
+.audioDetails a {
+  color: #5680E9;
+  text-decoration: none;
+}
+
+.audioDetails a:hover {
+  text-decoration: underline;
+}
+
+.saveButton {
+  background-color: #84CEEB;
+  border: none;
+  color: white;
+  padding: 20px 35px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  bottom: -280px;
+  right: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.saveButton:hover {
+  background-color: #5680E9;
+}
+
+.tags {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 35px;
+}
+
+.tagButton {
+  background-color: #5680E9;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.tagButton:hover {
+  background-color: darkpurple;
+}
+
+.tagInput {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  flex-grow: 1;
+}
+
+.tags label {
+  margin-bottom: 10px;
+  display: block;
+}
