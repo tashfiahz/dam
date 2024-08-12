@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './enterModal.module.css'; // Import your CSS module
+import styles from './enterModal.module.css'; 
 
 const EnterModal = ({ isOpen, onClose, onSubmit, initialProjectName }) => {
   const [projectName, setProjectName] = useState(initialProjectName || '');
