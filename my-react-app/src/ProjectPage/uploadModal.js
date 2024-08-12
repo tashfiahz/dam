@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styles from './uploadModal.module.css';
+import Notifications from './notification';
 import uploadImage from './upload.png';
 
 function UploadModal({ closeModal, userId, projectname }) {
-  const [isDraggingOver, setIsDraggingOver] = useState(false); // State to track drag over state
+  const [isDraggingOver, setIsDraggingOver] = useState(false); 
   const [file, setFile] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const handleFileDrop = (event) => {
     event.preventDefault();
@@ -12,9 +14,8 @@ function UploadModal({ closeModal, userId, projectname }) {
     const file = event.dataTransfer.files[0];
     if (file && isValidFile(file)) {
       setFile(file);
-    }
-    else {
-      alert('Please upload a valid photo or video file. Photos can be .jpeg, .png, .svg, or .gif. Videos can be .mp4, .webm, or .ogg.');
+    } else {
+      setNotification('Please upload a valid photo or video file. Photos can be .jpeg, .png, .svg, or .gif. Videos can be .mp4, .webm, or .ogg.');
     }
   };
 
@@ -22,9 +23,8 @@ function UploadModal({ closeModal, userId, projectname }) {
     const file = event.target.files[0];
     if (file && isValidFile(file)) {
       setFile(file);
-    }
-    else {
-      alert('Please upload a valid photo or video file. Photos can be .jpeg, .png, .svg, or .gif. Videos can be .mp4, .webm, or .ogg.')
+    } else {
+      setNotification('Please upload a valid photo or video file. Photos can be .jpeg, .png, .svg, or .gif. Videos can be .mp4, .webm, or .ogg.');
     }
   };
 
@@ -45,7 +45,7 @@ function UploadModal({ closeModal, userId, projectname }) {
 
   const handleUpload = async () => {
     if (!file) {
-      alert('Please select a file to upload.');
+      setNotification('Please select a file to upload.');
       return;
     }
 
@@ -57,7 +57,6 @@ function UploadModal({ closeModal, userId, projectname }) {
     fileData.append('userId', userId);
 
     try {
-      // Step 1: Upload the file to GCS and get the URL
       const filegcs = await fetch('http://localhost:3501/upload-gcs', {
         method: 'POST',
         body: fileData,
@@ -65,13 +64,12 @@ function UploadModal({ closeModal, userId, projectname }) {
 
       if (!filegcs.ok) {
         const uploadResult = await filegcs.json();
-        alert('File upload failed: ' + uploadResult.message);
+        setNotification('File upload failed: ' + uploadResult.message);
         return;
       }
 
       const { url: fileUrl } = await filegcs.json();
 
-      // Step 2: Collect metadata and send it to MongoDB
       const metadata = {
         userId,
         projectname,
@@ -89,21 +87,20 @@ function UploadModal({ closeModal, userId, projectname }) {
       });
 
       if (metadataResponse.ok) {
-        alert('File uploaded successfully.');
-        closeModal();
-      } 
-      else {
+        setNotification('File uploaded successfully.');
+        setTimeout(closeModal, 2000);  
+      } else {
         const metadataResult = await metadataResponse.json();
-        alert('Failed to store metadata: ' + metadataResult.message);
+        setNotification('Failed to store metadata: ' + metadataResult.message);
       }
     } catch (error) {
       console.error('Error uploading file and metadata:', error);
-      alert('Upload failed: ' + error.message);
+      setNotification('Upload failed: ' + error.message);
     }
   };
 
   const handleFileSelectClick = () => {
-    document.getElementById('fileInput').click(); // Click the file input element
+    document.getElementById('fileInput').click(); 
   };
 
   return (
@@ -121,10 +118,13 @@ function UploadModal({ closeModal, userId, projectname }) {
               onDragOver={handleDragEnter}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
-              onClick={handleFileSelectClick} // Open file selection on click
+              onClick={handleFileSelectClick} 
             >
               <img src={uploadImage} alt="Upload Icon" className={styles.uploadIcon} />
               <u>Click here</u> or drag and drop
+              <h4 style={{ color: "lightgray", fontSize: "13px" }}>
+                Accepted files for photos are .jpeg, .png, .svg, or .gif and for videos can be .mp4, .webm, or .ogg.
+              </h4>
               <input
                 id="fileInput"
                 type="file"
@@ -142,6 +142,12 @@ function UploadModal({ closeModal, userId, projectname }) {
             <button className={`${styles.modalUploadButton} ${styles.lightBlueButton}`} onClick={handleUpload}>Upload</button> 
           </div>
         </div>
+        {notification && (
+          <Notifications
+            message={notification}
+            onClose={() => setNotification(null)}
+          />
+        )}
       </div>
     </div>
   );

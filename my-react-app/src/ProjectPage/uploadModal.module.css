@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,10 +14,10 @@
 .uploadModal {
   background-color: white;
   width: 80%;
-  max-width: 600px; /* Adjust maximum width as needed */
+  max-width: 600px;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
 }
 
 .modalHeader {
@@ -45,21 +45,10 @@
   padding: 10px;
 }
 
-.modalNextButton {
-  background-color:  #84CEEB; /* Light blue background */
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 5px;
-  font-size: .9rem;
-  text-align: center;
-  cursor: pointer;
-  margin-left: 450px;
-  font-family: 'Jura', sans-serif;
-}
+
 
 .modalUploadButton {
-  background-color:  #84CEEB; /* Light blue background */
+  background-color:  #84CEEB; 
   color: white;
   border: none;
   padding: 15px 30px;
@@ -71,33 +60,8 @@
   font-family: 'Jura', sans-serif;
 }
 
-.backButton {
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  width: 40px; 
-  height: 40px;
-  font-size: 1.5rem; 
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.backButton:hover {
-  background-color: #5680E9; /* Darker blue on hover */
-}
-
-.modalNextButton:hover {
-  background-color: #5680E9; /* Gradient dark purple */
-}
-
-.lightBlueButton {
-  background-color: #84CEEB; /* Light blue background */
-  color: white;
-}
-
-.lightBlueButton:hover {
-  background-image: #5680E9; /* Gradient dark purple */
+.modalUploadButton:hover {
+  background-color: #5680E9;
 }
 
 .initialStage {
@@ -117,8 +81,8 @@
 
 .dragFileChange {
   opacity: 0.35;
-  background-color: #5AB9EA; /* Background color when dragged over */
-  border-color: #5680E9; /* Border color when dragged over */
+  background-color: #5AB9EA; 
+  border-color: #5680E9; 
 }
 
 

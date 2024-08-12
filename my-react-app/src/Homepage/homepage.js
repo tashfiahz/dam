@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './homepage.module.css';
 import logo from './penguin.png';
+import EnterModal from './enterModal';
+import signOutIcon from "./signout.png"
 
 function HomePage() {
   const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(null);
+  const [currentProject, setCurrentProject] = useState('');
 
-  //GET USERNAME FOR DISPLAY
   const getUserName = async () => {
     try {
       const response = await fetch('http://localhost:3501/get_user_info', {
@@ -26,7 +30,6 @@ function HomePage() {
     }
   }
 
-  //GET USERID PASS IT DOWN TO ANY COMPONENTS THAT MAKE REQUESTS TO THE BACKEND
   const getUserId = async () => {
     try {
       const response = await fetch('http://localhost:3501/get_user_info', {
@@ -90,23 +93,16 @@ function HomePage() {
     window.location.href = "/auth";
   }
 
-  const handleCreateProject = async () => {
-    const projectname = prompt("Enter new project name:");
-    if (projectname) {
-      try {
-        await fetch('http://localhost:3501/create-project', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, project: projectname }),
-        });
-        setProjects((prevprojects) => [...prevprojects, projectname]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
+  const handleCreateProject = () => {
+    setModalType('create');
+    setModalOpen(true);
+  };
+
+  const handleRenameProject = (projectname) => {
+    setCurrentProject(projectname);
+    setModalType('rename');
+    setModalOpen(true);
+  };
 
   const handleDeleteProject = async (projectname) => {
     try {
@@ -123,32 +119,44 @@ function HomePage() {
     }
   };
 
-  const handleRenameProject = async (oldprojectname) => {
-    const newprojectname = prompt("Enter new project name:");
-    if (newprojectname) {
-      try {
-        await fetch('http://localhost:3501/rename-project', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, project: oldprojectname, newproject: newprojectname}),
-        });
-        setProjects((prevprojects) => prevprojects.map((project) => (project === oldprojectname ? newprojectname : project)));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
   const handleProjectClick = (projectname) => {
     const url = `http://localhost:3000/${projectname}`;
     window.location.href = url;
   }
 
   const handleSearch = () => {
-    // Perform search functionality here
     console.log('Searching...');
+  };
+
+  const handleModalSubmit = async (projectName) => {
+    if (modalType === 'create') {
+      try {
+        await fetch('http://localhost:3501/create-project', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, project: projectName }),
+        });
+        setProjects((prevprojects) => [...prevprojects, projectName]);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (modalType === 'rename') {
+      try {
+        await fetch('http://localhost:3501/rename-project', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, project: currentProject, newproject: projectName }),
+        });
+        setProjects((prevprojects) => prevprojects.map((project) => (project === currentProject ? projectName : project)));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    setModalOpen(false);
   };
 
   return (
@@ -167,37 +175,44 @@ function HomePage() {
               </svg>
             </button>
           </div>
-          <li className={styles.signOut} onClick={onLogOut}>Sign Out</li>
+          <div className={styles.signOutContainer}>
+          <li className={styles.signOut} onClick={onLogOut}>
+            <img src={signOutIcon} alt="Sign Out" />
+            Sign Out
+          </li>
         </div>
-      <div className={styles.content}>
-        <div>
-            {username ? <h1>Hello, {username}</h1> : <h1>Loading...</h1>}
         </div>
-        {projects.length > 0 ? (
-          <>
-          <div className={styles.tableContainer}>
-            <table>
-              <thead>
-                <tr>
-                  <th className={styles.projectNameColumn}>Project Name</th>
-                  <th className={styles.actionColumn}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((project) => (
-                  <tr key={project}>
-                    <td onClick={() => handleProjectClick(project)}>{project}</td>
-                    <td>
-                      <button onClick={() => handleRenameProject(project)}>Rename</button>
-                      <button onClick={() => handleDeleteProject(project)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className={styles.content}>
+        <div style={{ textAlign: 'center' }}>
+            {username ? <h1>Welcome to {username}'s DAM</h1> : <h1>Loading...</h1>}
           </div>
-          <button className={styles.createProjectButton} onClick={handleCreateProject}> + Create Project</button>
-          </>
+          {projects.length > 0 ? (
+            <>
+              <div className={styles.tableContainer}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th className={styles.projectNameColumn}>Project Name</th>
+                      <th className={styles.actionColumn}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.map((project) => (
+                      <tr key={project}>
+                        <td onClick={() => handleProjectClick(project)}>{project}</td>
+                        <td>
+                          <button onClick={() => handleRenameProject(project)}  style={{ padding: '6px' }}>Rename</button>
+                          <button onClick={() => handleDeleteProject(project)} style={{ backgroundColor: '#8860D0', opacity: 0.6, color: 'white', border: 'none', padding: '6px', borderRadius: '5px', cursor: 'pointer' }}>
+                          Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <button className={styles.createProjectButton} onClick={handleCreateProject}> + Create Project</button>
+            </>
           ) : (
             <div className={styles.noProjects}>
               <p>No projects, click Create Project to get started</p>
@@ -206,6 +221,13 @@ function HomePage() {
           )}
         </div>
       </div>
+
+      <EnterModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleModalSubmit}
+        initialProjectName={modalType === 'rename' ? currentProject : ''}
+      />
     </div>
   );
 }

@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './projectpage.module.css';
+import { Link } from 'react-router-dom';
 import logo from './penguin.png';
-import UploadModal from './uploadModal'; // Import the UploadModal component
-import playbutton from './playbutton.png'
+import UploadModal from './uploadModal'; 
+import playbutton from './playbutton.png';
+import filterIcon from './filtericon.png'; 
 
 function ProjectPage() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -85,7 +88,6 @@ function ProjectPage() {
   }
 
   const handleSearch = () => {
-    // Perform search functionality here
     console.log('Searching...');
   };
 
@@ -99,7 +101,7 @@ function ProjectPage() {
   };
 
   const handleUploadButton = () => {
-    openModal(); // Open the modal when Upload button is clicked
+    openModal(); 
   };
 
   const handlePhotoCheck = () => {
@@ -114,40 +116,36 @@ function ProjectPage() {
     setSortOrder(e.target.value);
   }
 
+  const handleFilterIconClick = () => {
+    setFilterModalOpen(true);
+  };
+
+  const handleFilterDone = () => {
+    setFilterModalOpen(false);
+    getMedia(userId, projectname);
+  };
+
+  const handleFilterclose = () => {
+    setFilterModalOpen(false);
+  };
+
   const filteredMedia = media.filter(item => (filterPhotos && item.type === 'photo') || (filterVideos && item.type === 'video'));
 
   const sortedMedia = filteredMedia.sort((x, y) => {
     if (sortOrder === 'a-z') {
       return x.name.localeCompare(y.name);
-    }
-    else {
+    } else {
       return y.name.localeCompare(x.name);
     }
-  })
+  });
 
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
-        <img src={logo} alt="Logo" className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
-        <h1 className={styles.homePagetitle}>DAM.IO</h1>
-        <div className={styles.filterSection}>
-          <h2>Media:</h2>
-          <label htmlFor="photo">
-            <input type="checkbox" id="photo" name="photo" checked={filterPhotos} onChange={handlePhotoCheck} />
-            Photo
-          </label>
-          <label htmlFor="video">
-            <input type="checkbox" id="video" name="video" checked={filterVideos} onChange={handleVideoCheck} />
-            Video
-          </label>
-          <div className={styles.sortSection}>
-            <h2>Sort By:</h2>
-            <select id="sortOrder" value={sortOrder} onChange={handleSortOrder}>
-              <option value="a-z">A-Z</option>
-              <option value="z-a">Z-A</option>
-            </select>
-          </div>
-        </div>
+        <Link to="/homepage">
+          <img src={logo} alt="Logo" className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
+          <h1 className={styles.homePagetitle}>DAM.IO</h1>
+        </Link>
       </div>
       <div className={styles.mainContent}>
         <div className={styles.header}>
@@ -159,10 +157,12 @@ function ProjectPage() {
               </svg>
             </button>
           </div>
-          <li className={styles.signOut} onClick={onLogOut}>Sign Out</li>
+          <div className={styles.filtersContainer}>
+              <img src={filterIcon} alt="Filter" className={styles.filterIcon} onClick={handleFilterIconClick} />
+            </div>
         </div>
         <div className={styles.content}>
-          <div>
+          <div style={{ textAlign: 'center'}}>
             <h1>{projectname}</h1>
           </div>
           {sortedMedia.length > 0 ? (
@@ -184,16 +184,15 @@ function ProjectPage() {
                 ))}
               </div>
               <div className={styles.uploadButtonContainer}>
-                <button className={styles.uploadButtonRight} onClick={handleUploadButton}> + Upload</button>
+                <button className={styles.uploadButtonRight} onClick={handleUploadButton}> + Upload Media</button>
               </div>
             </div>
           ) : (
             <div className={styles.emptyMessage}>
               <p>No media, click Upload to get started</p>
-              <button className={styles.uploadButton} onClick={handleUploadButton}> + Upload</button>
+              <button className={styles.uploadButton} onClick={handleUploadButton}> + Upload Media</button>
             </div>
           )}
-          {/* Upload Modal */}
           {modalOpen && (
             <UploadModal
               closeModal={closeModal}
@@ -201,9 +200,37 @@ function ProjectPage() {
               projectname={projectname}
             />
           )}
+          <div className={`${styles.filterModal} ${filterModalOpen ? styles.filterModalOpen : ''}`}>
+            <div className={styles.filterModalContent}>
+            <h1 className={styles.filtersText}>Filters</h1>
+              <h3>Media</h3>
+              <div className={styles.filterOptions}>
+                <label htmlFor="photo">
+                  <input type="checkbox" id="photo" name="photo" checked={filterPhotos} onChange={handlePhotoCheck} />
+                  Photo
+                </label>
+                <label htmlFor="video">
+                  <input type="checkbox" id="video" name="video" checked={filterVideos} onChange={handleVideoCheck} />
+                  Video
+                </label>
+              </div>
+              <div className={styles.sortSection}>
+                <h3>Sort By:</h3>
+                <select id="sortOrder" value={sortOrder} onChange={handleSortOrder}>
+                  <option value="a-z">A-Z</option>
+                  <option value="z-a">Z-A</option>
+                </select>
+              </div>
+              <div className={styles.filterModalFooter}>
+                <button className={styles.filterButton} onClick={handleFilterclose}>Close</button>
+                <button className={styles.filterButton} onClick={handleFilterDone}>Done</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  )};
+  );
+}
 
 export default ProjectPage;
