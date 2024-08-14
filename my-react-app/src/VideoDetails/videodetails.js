@@ -3,7 +3,7 @@ import styles from './videodetails.module.css';
 import { Link } from 'react-router-dom';
 import logo from '../penguin.png';
 
-function VideoDetails() { 
+function VideoDetails({ filetype, projectName }) {  // Accept `filetype` and `projectName` as props
   const [selectedTags, setSelectedTags] = useState([]);
   const [inputTag, setInputTag] = useState('');
   const [description, setDescription] = useState('');
@@ -15,10 +15,6 @@ function VideoDetails() {
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
-  };
-
-  const handleInputChange = (e) => {
-    setInputTag(e.target.value);
   };
 
   const handleKeyDown = (e) => {
@@ -35,6 +31,10 @@ function VideoDetails() {
         setSelectedTags(selectedTags.slice(0, -1));
       }
     }
+  };
+
+  const handleInputChange = (e) => {
+    setInputTag(e.target.value);
   };
 
   const handleDescriptionChange = (event) => {
@@ -66,39 +66,40 @@ function VideoDetails() {
         <div className={styles.imageContainer}>
           <img src="https://via.placeholder.com/300x200" alt="Main" className={styles.mainImage} />
         </div>
-        <div className={styles.detailsSection}>
+        <div className={styles.mainContainer}>
           <div className={styles.detailsContainer}>
             <div className={styles.title}>
               <label>Title:</label>
               <input type="text" className={styles.titleInput} />
             </div>
+
+            {/* Media Type Section */}
             <div className={styles.type}>
               <label htmlFor="mediaType">Type:</label>
-              <select id="mediaType" className={styles.dropdown}>
-                <option value="photo">Photo</option>
-                <option value="video">Video</option>
-              </select>
+              <input
+                type="text"
+                id="mediaType"
+                className={styles.typeInput}
+                value={filetype === 'photo' ? 'Photo' : 'Video'}
+                readOnly
+              />
             </div>
-            <div className={styles.projectsw}>
-              <label htmlFor="project">Project:  </label>
-              <select id="project" className={styles.dropdown}>
-                <option value="project1">Project 1</option>
-                <option value="testingProject">Testing Project</option>
-                <option value="tashProject">Tash Project</option>
-              </select>
+
+            {/* Project Name */}
+            <div className={styles.project}>
+              <label>Project:</label>
+              <input
+                type="text"
+                id="projectName"
+                className={styles.projectInput}
+                value={projectName}  // Set project name from the prop
+                readOnly
+              />
             </div>
+
             <div className={styles.tags}>
               <label>Select Tags:</label>
-              <div className={styles.tagsContainer}>
-                {selectedTags.map(tag => (
-                  <button
-                    key={tag}
-                    className={styles.tagButton}
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
+              <div className={styles.tagsBox}>
                 <input
                   type="text"
                   value={inputTag}
@@ -107,33 +108,43 @@ function VideoDetails() {
                   className={styles.tagInput}
                   placeholder="Type and press Enter"
                 />
+                <div className={styles.tagsContainer}>
+                  {selectedTags.map(tag => (
+                    <button
+                      key={tag}
+                      className={styles.tagButton}
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <label>Description:</label>
+              <textarea
+                className={styles.descriptionInput}
+                value={description}
+                onChange={handleDescriptionChange}
+                maxLength="2000" 
+                placeholder="Enter description (up to 400 words)"
+              />
+              <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
+            </div>
+            <div className={styles.matchingAudioContainer}>
+              <div className={styles.audioImage}>
+                <img src="https://via.placeholder.com/150" alt="Audio Cover" />
+              </div>
+              <div className={styles.audioDetails}>
+                <div><strong>Artist:</strong> Example Artist</div>
+                <div><strong>Title:</strong> Example Title</div>
+                <div><strong>Album:</strong> Example Album</div>
+                <div><strong>Duration:</strong> 3:45</div>
+                <div><strong>Link:</strong> <a href="https://example.com" target="_blank" rel="noopener noreferrer">Listen</a></div>
               </div>
             </div>
           </div>
-          <div className={styles.descriptionContainer}>
-            <label>Description:</label>
-            <textarea
-              className={styles.descriptionInput}
-              value={description}
-              onChange={handleDescriptionChange}
-              maxLength="2000" 
-              placeholder="Enter description (up to 400 words)"
-            />
-            <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
-          </div>
-          <div className={styles.matchingAudioContainer}>
-            <div className={styles.audioImage}>
-              <img src="https://via.placeholder.com/150" alt="Audio Cover" />
-            </div>
-            <div className={styles.audioDetails}>
-              <div><strong>Artist:</strong> Example Artist</div>
-              <div><strong>Title:</strong> Example Title</div>
-              <div><strong>Album:</strong> Example Album</div>
-              <div><strong>Duration:</strong> 3:45</div>
-              <div><strong>Link:</strong> <a href="https://example.com" target="_blank" rel="noopener noreferrer">Listen</a></div>
-            </div>
-          </div>
-          <button className={styles.saveButton}>Save</button>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import styles from './photodetails.module.css';
+import styles from './photodetails.module.css'; 
 import { Link } from 'react-router-dom';
 import logo from '../penguin.png';
 
-function PhotoDetails() {
+function PhotoDetails({ filetype }) {  // Accept `filetype` as a prop
   const [selectedTags, setSelectedTags] = useState([]);
   const [inputTag, setInputTag] = useState('');
   const [description, setDescription] = useState('');
@@ -15,10 +15,6 @@ function PhotoDetails() {
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
-  };
-
-  const handleInputChange = (e) => {
-    setInputTag(e.target.value);
   };
 
   const handleKeyDown = (e) => {
@@ -35,6 +31,10 @@ function PhotoDetails() {
         setSelectedTags(selectedTags.slice(0, -1));
       }
     }
+  };
+
+  const handleInputChange = (e) => {
+    setInputTag(e.target.value);
   };
 
   const handleDescriptionChange = (event) => {
@@ -66,39 +66,39 @@ function PhotoDetails() {
         <div className={styles.imageContainer}>
           <img src="https://via.placeholder.com/300x200" alt="Main" className={styles.mainImage} />
         </div>
-        <div className={styles.detailsSection}>
+        <div className={styles.mainContainer}>
           <div className={styles.detailsContainer}>
             <div className={styles.title}>
               <label>Title:</label>
               <input type="text" className={styles.titleInput} />
             </div>
+
+            {/* Media Type Section */}
             <div className={styles.type}>
               <label htmlFor="mediaType">Type:</label>
-              <select id="mediaType" className={styles.dropdown}>
-                <option value="photo">Photo</option>
-                <option value="video">Video</option>
-              </select>
+              <input
+                type="text"
+                id="mediaType"
+                className={styles.typeInput}
+                value={filetype === 'photo' ? 'Photo' : 'Video'}
+                readOnly
+              />
             </div>
-            <div className={styles.projectsw}>
-              <label htmlFor="project">Project:  </label>
+
+            {/* Project Section */}
+            <div className={styles.projects}>
+              <label htmlFor="project">Project:</label>
               <select id="project" className={styles.dropdown}>
+                {/* Dynamically populate options from your project list */}
                 <option value="project1">Project 1</option>
                 <option value="testingProject">Testing Project</option>
                 <option value="tashProject">Tash Project</option>
               </select>
             </div>
+
             <div className={styles.tags}>
               <label>Select Tags:</label>
-              <div className={styles.tagsContainer}>
-                {selectedTags.map(tag => (
-                  <button
-                    key={tag}
-                    className={styles.tagButton}
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
+              <div className={styles.tagsBox}>
                 <input
                   type="text"
                   value={inputTag}
@@ -107,28 +107,38 @@ function PhotoDetails() {
                   className={styles.tagInput}
                   placeholder="Type and press Enter"
                 />
+                <div className={styles.tagsContainer}>
+                  {selectedTags.map(tag => (
+                    <button
+                      key={tag}
+                      className={styles.tagButton}
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <label>Description:</label>
+              <textarea
+                className={styles.descriptionInput}
+                value={description}
+                onChange={handleDescriptionChange}
+                maxLength="2000" 
+                placeholder="Enter description (up to 400 words)"
+              />
+              <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
+            </div>
+            <div className={styles.similarImagesContainer}>
+              <label>Similar Images:</label>
+              <div className={styles.similarImages}>
+                <img src="https://via.placeholder.com/150" alt="Similar 1" />
+                <img src="https://via.placeholder.com/150" alt="Similar 2" />
               </div>
             </div>
           </div>
-          <div className={styles.descriptionContainer}>
-            <label>Description:</label>
-            <textarea
-              className={styles.descriptionInput}
-              value={description}
-              onChange={handleDescriptionChange}
-              maxLength="2000" 
-              placeholder="Enter description (up to 400 words)"
-            />
-            <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
-          </div>
-          <div className={styles.similarImagesContainer}>
-            <label>Similar Images:</label>
-            <div className={styles.similarImages}>
-              <img src="https://via.placeholder.com/150" alt="Similar 1" />
-              <img src="https://via.placeholder.com/150" alt="Similar 2" />
-            </div>
-          </div>
-          <button className={styles.saveButton}>Save</button>
         </div>
       </div>
     </div>
