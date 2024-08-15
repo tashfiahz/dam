@@ -15,7 +15,7 @@ function HomePage() {
   //GET USERNAME FOR DISPLAY
   const getUserName = async () => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/get_user_info', {
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
         method: 'GET'
       });
       const data = await response.json();
@@ -33,7 +33,7 @@ function HomePage() {
   //GET USERID PASS IT DOWN TO ANY COMPONENTS THAT MAKE REQUESTS TO THE BACKEND
   const getUserId = async () => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/get_user_info', {
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
         method: 'GET'
       });
       const data = await response.json();
@@ -49,7 +49,7 @@ function HomePage() {
 
   const checkBucket = async (user) => {
     try {
-      await fetch('http://dambackend.onrender.com/check-bucket', {
+      await fetch('https://dambackend.onrender.com/check-bucket', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function HomePage() {
 
   const getProjects = async (user) => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/retrieve-projects', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve-projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function HomePage() {
     const projectname = prompt("Enter new project name:");
     if (projectname) {
       try {
-        await fetch('http://dambackend.onrender.com/create-project', {
+        await fetch('https://dambackend.onrender.com/create-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ function HomePage() {
     const confirm = window.confirm('Are you sure you want to delete this project?');
     if (confirm) {
       try {
-        await fetch('http://dambackend.onrender.com/delete-project', {
+        await fetch('https://dambackend.onrender.com/delete-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ function HomePage() {
     const newprojectname = prompt("Enter new project name:");
     if (newprojectname) {
       try {
-        await fetch('http://dambackend.onrender.com/rename-project', {
+        await fetch('https://dambackend.onrender.com/rename-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

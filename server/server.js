@@ -20,11 +20,11 @@ supertokens.init(SuperTokensConfig);
 
 const app = express();
 app.use(express.json());
-const port = 3501;
+const port = process.env.PORT || 3000;
 const upload = multer();
 
 app.use(cors({
-    origin: "http://damfront6.onrender.com",
+    origin: "https://damfront6.onrender.com/",
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     methods: ["GET", "PUT", "POST", "DELETE"],
     credentials: true,
@@ -345,7 +345,7 @@ app.post('/remove', async (req, res) => {
 
 app.use(errorHandler());
 
-app.listen(3500, () => console.log(`Server listening on port ${port}`));
+app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 // DO NOT DEFINE ANY ENDPOINTS BELOW THIS POINT! ALL ENDPOINTS MUST BE DEFINED BETWEEN app.use(middleware()); AND app.use(errorHandler());
 

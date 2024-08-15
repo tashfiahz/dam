@@ -26,7 +26,7 @@ function VideoDetails() {
 
   const getUserId = async () => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/get_user_info', {
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
         method: 'GET'
       });
       const data = await response.json();
@@ -42,7 +42,7 @@ function VideoDetails() {
 
   const getProjects = async (user) => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/retrieve-projects', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve-projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function VideoDetails() {
 
   const getMediaFile = async (user, name, projectname) => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/retrieve', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ function VideoDetails() {
 
   const getMusic = async (url) => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/audio_recognition', {
+      const response = await fetch('https://dambackend.onrender.com/audio_recognition', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ function VideoDetails() {
 
   const updateMedia = async () => {
     try {
-      const response = await fetch('http://dambackend.onrender.com/update', {
+      const response = await fetch('https://dambackend.onrender.com/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ function VideoDetails() {
     const confirm = window.confirm('Are you sure you want to delete this media?');
     if (confirm) {
       try {
-        const response = await fetch('http://dambackend.onrender.com/remove', {
+        const response = await fetch('https://dambackend.onrender.com/remove', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
