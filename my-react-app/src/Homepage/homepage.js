@@ -191,7 +191,7 @@ function HomePage() {
               onChange={(e) => setSearchType(e.target.value)}
               style={{ marginRight: '8px' }}
             >
-              <option value="name">Project Name</option>
+              <option value="name">Name</option>
               <option value="tag">Tag</option>
             </select>
             <input

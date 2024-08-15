@@ -124,7 +124,7 @@ function UploadModal({ closeModal, userId, projectname }) {
               <img src={uploadImage} alt="Upload Icon" className={styles.uploadIcon} />
               <u>Click here</u> or drag and drop
               <h4 style={{ color: "lightgray", fontSize: "13px" }}>
-                Accepted files for photos are .jpeg, .png, .svg, or .gif and for videos can be .mp4, .webm, or .ogg.
+                Accepted file types for photos are .jpeg, .png, .svg, or .gif. Videos can be .mp4, .webm, or .ogg.
               </h4>
               <input
                 id="fileInput"

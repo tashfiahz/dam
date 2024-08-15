@@ -342,7 +342,7 @@ function VideoDetails() {
           )}
         </div>
         <Link to={`/${projectname}`} className={styles.backLink}>
-        ← Back to Projects Page
+        ← Back to Project Page
       </Link>
       </div>
     </div>
