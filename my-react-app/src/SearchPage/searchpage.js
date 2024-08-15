@@ -4,6 +4,8 @@ import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './searchpage.module.css';
 import logo from './penguin.png';
 import playbutton from './playbutton.png'
+import filterIcon from './filtericon.png'; 
+import signOutIcon from "./signout.png";
 
 function SearchPage() {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ function SearchPage() {
   const [searchInput, setSearchInput] = useState('');
   const [searchType, setSearchType] = useState('name');
   const [filteredMedia, setFilteredMedia] = useState([]);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   //GET USERNAME FOR DISPLAY
   const getUserName = async () => {
@@ -96,6 +99,20 @@ function SearchPage() {
     filterSearch(media, type, query);
   }, [filterPhotos, filterVideos, sortOrder, type, query, media])
 
+
+  const handleFilterIconClick = () => {
+    setFilterModalOpen(true);
+  };
+
+  const handleFilterDone = () => {
+    setFilterModalOpen(false);
+    getMedia(userId);
+  };
+
+  const handleFilterClose = () => {
+    setFilterModalOpen(false);
+  };
+
   const onLogOut = async () => {
     await signOut();
     navigate('/auth');
@@ -138,31 +155,21 @@ function SearchPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.sidebar}>
-        <Link to="/homepage">
-          <img src={logo} alt="Logo" className={styles.homePageLogo} />
-        </Link>
-        <Link to="/homepage" className={styles.titleLink}>
-          <h1 className={styles.homePagetitle}>DAM.IO</h1>
-        </Link>
-        <div className={styles.filterSection}>
-          <h2>Media:</h2>
-          <label htmlFor="photo">
-            <input type="checkbox" id="photo" name="photo" checked={filterPhotos} onChange={handlePhotoCheck} />
-            Photo
-          </label>
-          <label htmlFor="video">
-            <input type="checkbox" id="video" name="video" checked={filterVideos} onChange={handleVideoCheck} />
-            Video
-          </label>
-          <div className={styles.sortSection}>
-            <h2>Sort By:</h2>
-            <select id="sortOrder" value={sortOrder} onChange={handleSortOrder}>
-              <option value="a-z">A-Z</option>
-              <option value="z-a">Z-A</option>
-            </select>
+          <div className={styles.sidebar}>
+          <Link to="/homepage">
+            <img src={logo} alt="Logo" className={styles.homePageLogo} />
+          </Link>
+          <Link to="/homepage" className={styles.titleLink}>
+            <h1 className={styles.homePagetitle}>DAM.IO</h1>
+          </Link>
+          <div className={styles.mainContent}>
           </div>
-        </div>
+          <div className={styles.signOutContainer}>
+            <li className={styles.signOut} onClick={onLogOut}>
+              <img src={signOutIcon} alt="Sign Out" />
+              Sign Out
+            </li>
+          </div>
       </div>
       <div className={styles.mainContent}>
         <div className={styles.header}>
@@ -184,11 +191,13 @@ function SearchPage() {
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
             >
-              <option value="name">Name</option>
+              <option value="name">Project Name</option>
               <option value="tag">Tag</option>
             </select>
           </div>
-          <li className={styles.signOut} onClick={onLogOut}>Sign Out</li>
+          <div className={styles.filtersContainer}>
+            <img src={filterIcon} alt="Filter" className={styles.filterIcon} onClick={handleFilterIconClick} />
+          </div>
         </div>
         <div className={styles.content}>
           <div>
@@ -219,7 +228,34 @@ function SearchPage() {
             </div>
           )}
         </div>
-      </div>
+        <div className={`${styles.filterModal} ${filterModalOpen ? styles.filterModalOpen : ''}`}>
+            <div className={styles.filterModalContent}>
+              <h1 className={styles.filtersText}>Filters</h1>
+              <h3>Media</h3>
+              <div className={styles.filterOptions}>
+                <label htmlFor="photo">
+                  <input type="checkbox" id="photo" name="photo" checked={filterPhotos} onChange={handlePhotoCheck} />
+                  Photo
+                </label>
+                <label htmlFor="video">
+                  <input type="checkbox" id="video" name="video" checked={filterVideos} onChange={handleVideoCheck} />
+                  Video
+                </label>
+              </div>
+              <div className={styles.sortSection}>
+                <h3>Sort By:</h3>
+                <select id="sortOrder" value={sortOrder} onChange={handleSortOrder}>
+                  <option value="a-z">A-Z</option>
+                  <option value="z-a">Z-A</option>
+                </select>
+              </div>
+              <div className={styles.filterModalFooter}>
+                <button className={styles.filterButton} onClick={handleFilterClose}>Close</button>
+                <button className={styles.filterButton} onClick={handleFilterDone}>Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   )};
 

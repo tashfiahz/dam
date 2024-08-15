@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import styles from './photodetails.module.css';
 import { Link } from 'react-router-dom';
 import logo from '../Homepage/penguin.png';
+import ConfirmationModal from './confirmationModal';
+
 
 function PhotoDetails() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function PhotoDetails() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [inputTag, setInputTag] = useState('');
   const [similarPhotos, setSimilarPhotos] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getUserId = async () => {
     try {
@@ -135,7 +138,20 @@ function PhotoDetails() {
         console.error(error);
       }
     }
-  }
+  };
+
+  const handleDeleteClick = () => {
+    setIsModalVisible(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    setIsModalVisible(false);
+    deleteMedia();
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false); 
+  };
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -260,7 +276,7 @@ function PhotoDetails() {
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
                   className={styles.tagInput}
-                  placeholder="Type and press Enter"
+                  placeholder="Type and press Enter to create tag(s)"
                 />
               </div>
             </div>
@@ -293,8 +309,21 @@ function PhotoDetails() {
         </div>
         <div className={styles.buttonGroup}>
           <button className={styles.saveButton} onClick={() => updateMedia()}>Save</button>
-          <button className={styles.deleteButton} onClick={() => deleteMedia()}>Delete</button>
+          <button className={styles.deleteButton} onClick={handleDeleteClick}>
+            Delete
+          </button>
+
+          {isModalVisible && (
+            <ConfirmationModal
+              message="Are you sure you want to delete this media?"
+              onConfirm={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+            />
+          )}
         </div>
+        <Link to={`/${projectname}`} className={styles.backLink}>
+        ← Back to Projects Page
+      </Link>
       </div>
     </div>
   );

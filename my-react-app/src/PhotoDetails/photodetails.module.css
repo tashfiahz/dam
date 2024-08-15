@@ -65,8 +65,9 @@
 }
 
 .mainImage {
-  width: 100%;
-  max-width: 600px;
+  width: 500px; 
+  height: 450px; 
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 20px;
 }
@@ -98,7 +99,7 @@
 }
 
 .titleInput, .dropdown, .tagInput {
-  width: 100%;
+  width: 600px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -113,15 +114,18 @@
   border-radius: 8px;
   padding: 15px;
   background-color: #f9f9f9;
-  width: 100%;
-  max-width: 600px;
+  width: 600px;
+  height: 200px;
+  display: flex;
+  flex-direction: column; 
 }
 
 .tagsContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 15px;
+  margin-top: auto; 
+  overflow-y: auto; 
 }
 
 .tagButton {
@@ -131,10 +135,6 @@
   border-radius: 3px;
   padding: 8px 12px;
   cursor: pointer;
-}
-
-.tagButton:hover {
-  background-color: #4762b7;
 }
 
 .descriptionContainer {
@@ -159,14 +159,14 @@
 
 .similarImagesContainer {
   width: 100%;
-  background-color: #5680E9;
+  background-color: #fefba9;
   padding: 10px;
   border-radius: 8px;
   margin-top: 20px;
 }
 
 .similarImagesContainer label {
-  color: white;
+  color: black;
   font-size: 1.5rem;
   margin-bottom: 10px;
   display: block;
@@ -193,14 +193,15 @@
 .buttonGroup {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 30px;
+  margin-left: 1000px;
 }
 
 .saveButton, .deleteButton {
   background-color: #46beed;
   border: none;
   color: white;
-  padding: 15px 30px;
+  padding: 10px 25px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
@@ -214,4 +215,9 @@
 
 .deleteButton:hover {
   background-color: #d14f4f;
+}
+
+.backLink {
+  font-size: large;
+  color: #5680E9;
 }
