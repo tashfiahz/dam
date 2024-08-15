@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { signOut } from "supertokens-auth-react/recipe/session";
-import styles from './projectpage.module.css';
+import styles from './searchpage.module.css';
 import logo from './penguin.png';
-import UploadModal from './uploadModal'; // Import the UploadModal component
 import playbutton from './playbutton.png'
 
-function ProjectPage() {
+function SearchPage() {
   const navigate = useNavigate();
-  const { projectname } = useParams();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const { type, query } = useParams();
   const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
   const [media, setMedia] = useState([]);
@@ -18,7 +15,6 @@ function ProjectPage() {
   const [filterVideos, setFilterVideos] = useState(true);
   const [sortOrder, setSortOrder] = useState('a-z');
   const [searchInput, setSearchInput] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('name');
   const [filteredMedia, setFilteredMedia] = useState([]);
 
@@ -57,79 +53,63 @@ function ProjectPage() {
     }
   }
 
-  const getMedia = async (userId, projectname) => {
+  const getMedia = async (userId) => {
     try {
       const response = await fetch('http://localhost:3501/retrieve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId, projectname })
+        body: JSON.stringify({ userId })
       });
       const data = await response.json();
       setMedia(data);
-      setFilteredMedia(data);
+      filterSearch(data, type, query);
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const filterSearch = (mediaArray, queryType, queryText) => {
+    const filtered = mediaArray.filter(item => {
+      //incorporate checked filters in search
+      const typeMatch = (filterPhotos && item.type === 'photo') || (filterVideos && item.type === 'video');
+      const searchMatch = queryType === 'name' ? item.name.toLowerCase().includes(queryText.toLowerCase()) : item.tags.some(tag => tag.toLowerCase().includes(queryText.toLowerCase()));
+      //if both are true for media, keep it in filtered array
+      return typeMatch  && searchMatch;
+    });
+    setFilteredMedia(filtered);
   }
 
   useEffect(() => {
     const handleFirstRender = async () => {
       const user = await getUserName();
       const id = await getUserId();
-      if (id && projectname) {
-        await getMedia(id, projectname);
+      if (id) {
+        await getMedia(id);
       }
     };
     handleFirstRender();
   }, [])
 
   useEffect(() => {
-    handleSearch();
-  }, [filterPhotos, filterVideos, searchQuery, media, sortOrder])
+    filterSearch(media, type, query);
+  }, [filterPhotos, filterVideos, sortOrder, type, query, media])
 
   const onLogOut = async () => {
     await signOut();
     navigate('/auth');
   }
 
-  const handleSearch = () => {
-    //can be used for both checkbox filters and search
-    const filtered = media.filter(item => {
-      //incorporate checked filters in search
-      const typeMatch = (filterPhotos && item.type === 'photo') || (filterVideos && item.type === 'video');
-      const searchMatch = searchType === 'name' ? item.name.toLowerCase().includes(searchQuery.toLowerCase()) : item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      //if both are true for media, keep it in filtered array
-      return typeMatch  && searchMatch;
-    });
-    setFilteredMedia(filtered);
-  };
-
   const handleSearchClick = () => {
-    setSearchQuery(searchInput);
-    setSearchInput('');
+    navigate(`/search/${searchType}/${searchInput}`);
   }
 
   const handleSearchEnter = (e) => {
     if (e.key === 'Enter') {
-      setSearchQuery(searchInput);
-      setSearchInput('');
+      navigate(`/search/${searchType}/${searchInput}`);
     }
   }
-
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    getMedia(userId, projectname)
-  };
-
-  const handleUploadButton = () => {
-    openModal(); // Open the modal when Upload button is clicked
-  };
 
   const handlePhotoCheck = () => {
     setFilterPhotos(!filterPhotos);
@@ -147,7 +127,6 @@ function ProjectPage() {
     window.location.reload();
   }
 
-  //Sorting strings from https://stackoverflow.com/questions/52030110/sorting-strings-in-descending-order-in-javascript-most-efficiently
   const sortedMedia = filteredMedia.sort((x, y) => {
     if (sortOrder === 'a-z') {
       return x.name.localeCompare(y.name);
@@ -190,7 +169,7 @@ function ProjectPage() {
           <div className={styles.searchBar}>
             <input 
               type="text" 
-              placeholder="Search in project..."
+              placeholder="Search..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyDown={handleSearchEnter}
@@ -213,7 +192,7 @@ function ProjectPage() {
         </div>
         <div className={styles.content}>
           <div>
-              <h1 onClick={handleProjectClick}>{projectname}</h1>
+              <h1>Search: {query}</h1>
           </div>
           {sortedMedia.length > 0 ? (
             <div>
@@ -233,27 +212,15 @@ function ProjectPage() {
                   </div>
                 ))}
               </div>
-              <div className={styles.uploadButtonContainer}>
-                <button className={styles.uploadButtonRight} onClick={handleUploadButton}> + Upload</button>
-              </div>
             </div>
           ) : (
             <div className={styles.emptyMessage}>
-              <p>No media, click Upload to get started</p>
-              <button className={styles.uploadButton} onClick={handleUploadButton}> + Upload</button>
+              <p>No media found</p>
             </div>
-          )}
-          {/* Upload Modal */}
-          {modalOpen && (
-            <UploadModal
-              closeModal={closeModal}
-              userId={userId}
-              projectname={projectname}
-            />
           )}
         </div>
       </div>
     </div>
   )};
 
-export default ProjectPage;
+export default SearchPage;

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { signOut } from "supertokens-auth-react/recipe/session";
 import styles from './homepage.module.css';
 import logo from './penguin.png';
 
 function HomePage() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchType, setSearchType] = useState('name');
 
   //GET USERNAME FOR DISPLAY
   const getUserName = async () => {
@@ -85,6 +89,7 @@ function HomePage() {
     handleFirstLogin();
   }, [])
 
+  //From https://supertokens.com/docs/passwordless/pre-built-ui/sign-out
   const onLogOut = async () => {
     await signOut();
     window.location.href = "/auth";
@@ -109,17 +114,20 @@ function HomePage() {
   }
 
   const handleDeleteProject = async (projectname) => {
-    try {
-      await fetch('http://localhost:3501/delete-project', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, project: projectname }),
-      });
-      setProjects((prevprojects) => prevprojects.filter((project) => project !== projectname));
-    } catch (error) {
-      console.error(error);
+    const confirm = window.confirm('Are you sure you want to delete this project?');
+    if (confirm) {
+      try {
+        await fetch('http://localhost:3501/delete-project', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, project: projectname }),
+        });
+        setProjects((prevprojects) => prevprojects.filter((project) => project !== projectname));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -142,30 +150,52 @@ function HomePage() {
   };
 
   const handleProjectClick = (projectname) => {
-    const url = `http://localhost:3000/${projectname}`;
-    window.location.href = url;
+    navigate(`/${projectname}`);
   }
 
-  const handleSearch = () => {
-    // Perform search functionality here
-    console.log('Searching...');
-  };
+  const handleSearchClick = () => {
+    navigate(`/search/${searchType}/${searchInput}`);
+  }
+
+  const handleSearchEnter = (e) => {
+    if (e.key === 'Enter') {
+      navigate(`/search/${searchType}/${searchInput}`);
+    }
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
-        <img src={logo} alt="Logo" className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
-        <h1 className={styles.homePagetitle}>DAM.IO</h1>
+        <Link to="/hompage">
+          <img src={logo} alt="Logo" className={styles.homePageLogo} style={{ width: '50px', height: '50px' }} />
+        </Link>
+        <Link to="/homepage">
+          <h1 className={styles.homePagetitle}>DAM.IO</h1>
+        </Link>
       </div>
       <div className={styles.mainContent}>
         <div className={styles.header}>
           <div className={styles.searchBar}>
-            <input type="text" placeholder="Search..." />
-            <button className={styles.searchButton} onClick={handleSearch}>
+            <input 
+              type="text" 
+              placeholder="Search..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={handleSearchEnter}
+            />
+            <button className={styles.searchButton} onClick={handleSearchClick}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M21.7 20.3l-4.5-4.5c1-1.3 1.6-3 1.6-4.8 0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8c1.8 0 3.5-0.6 4.8-1.6l4.5 4.5c0.2 0.2 0.5 0.3 0.7 0.3s0.5-0.1 0.7-0.3c0.4-0.4 0.4-1 0-1.4zM9.9 16.1c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
               </svg>
             </button>
+            <select
+              className={styles.searchTypeDropdown}
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+            >
+              <option value="name">Name</option>
+              <option value="tag">Tag</option>
+            </select>
           </div>
           <li className={styles.signOut} onClick={onLogOut}>Sign Out</li>
         </div>

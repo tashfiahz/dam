@@ -9,8 +9,13 @@ import * as reactRouterDom from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './Homepage/homepage';
 import ProjectPage from './ProjectPage/projectpage';
+import PhotoDetails from './PhotoDetails/photodetails';
+import VideoDetails from './VideoDetails/videodetails';
+import SearchPage from './SearchPage/searchpage';
 import styles from './App.module.css'; 
 
+
+//From https://supertokens.com/docs/emailpassword/pre-built-ui/setup/frontend
 SuperTokens.init({
   appInfo: {
       appName: "dam.io",
@@ -71,6 +76,30 @@ function App() {
             element={
               <SessionAuth>
                 <ProjectPage />
+              </SessionAuth>
+            } 
+          />
+          <Route 
+            path="/:projectname/photo/:name" 
+            element={
+              <SessionAuth>
+                <PhotoDetails />
+              </SessionAuth>
+            } 
+          />
+          <Route 
+            path="/:projectname/video/:name" 
+            element={
+              <SessionAuth>
+                <VideoDetails />
+              </SessionAuth>
+            } 
+          />
+          <Route 
+            path="/search/:type/:query" 
+            element={
+              <SessionAuth>
+                <SearchPage />
               </SessionAuth>
             } 
           />

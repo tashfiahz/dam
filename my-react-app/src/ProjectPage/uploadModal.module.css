@@ -46,7 +46,7 @@
 }
 
 .modalNextButton {
-  background-color:  #84CEEB; /* Light blue background */
+  background-color:  #46beed; /* Light blue background */
   color: white;
   border: none;
   padding: 15px 30px;
@@ -59,7 +59,7 @@
 }
 
 .modalUploadButton {
-  background-color:  #84CEEB; /* Light blue background */
+  background-color:  #46beed; /* Light blue background */
   color: white;
   border: none;
   padding: 15px 30px;
@@ -84,20 +84,20 @@
 }
 
 .backButton:hover {
-  background-color: #5680E9; /* Darker blue on hover */
+  background-color: #5680E9;
 }
 
 .modalNextButton:hover {
-  background-color: #5680E9; /* Gradient dark purple */
+  background-color: #5680E9;
 }
 
 .lightBlueButton {
-  background-color: #84CEEB; /* Light blue background */
+  background-color: #46beed;
   color: white;
 }
 
 .lightBlueButton:hover {
-  background-image: #5680E9; /* Gradient dark purple */
+  background-image: #5680E9;
 }
 
 .initialStage {
@@ -117,8 +117,8 @@
 
 .dragFileChange {
   opacity: 0.35;
-  background-color: #5AB9EA; /* Background color when dragged over */
-  border-color: #5680E9; /* Border color when dragged over */
+  background-color: #5AB9EA;
+  border-color: #5680E9;
 }
 
 

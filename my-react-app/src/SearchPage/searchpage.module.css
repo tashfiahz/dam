@@ -21,7 +21,7 @@
 }
 
 .sidebar a {
-  padding: 0 32px;
+  padding: 0px 32px;
   text-decoration: none;
   font-size: 25px;
   color: #818181;
@@ -30,6 +30,15 @@
 
 .sidebar a:hover {
   color: #f1f1f1;
+}
+
+.filterSection {
+  margin-top: 10px;
+  padding-left: 10px;
+}
+
+.filterSection h2 {
+  color: white;
 }
 
 .homePagetitle {
@@ -45,7 +54,18 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: white;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
 }
 
 .mainContent {
@@ -64,10 +84,10 @@
 
 .searchBar {
   display: flex; 
-  align-items: center;
-  border: solid white; 
-  border-radius: 40px; 
-  padding: 5px 10px;
+  align-items: center; 
+  border: solid white;
+  border-radius: 40px;
+  padding: 5px 10px; 
   position: relative; 
   width: 100%;
   max-width: 600px;
@@ -120,100 +140,78 @@
   position: relative;
 }
 
-.createProjectButton {
-  background-color: #46beed; 
-  border: none;
-  color: white;
-  font-size: large;
-  padding: 15px 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Jura', sans-serif;
-  text-align: center;
-  margin: 20px 0;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+.mediaGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  position: relative;
 }
 
-.createProjectButtonCenter {
-  background-color: #46beed; 
-  border: none;
-  color: white;
-  font-size: large;
-  padding: 15px 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Jura', sans-serif;
-  text-align: center;
-  margin: 20px 0;
+.mediaItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  max-height: 200px;
+  justify-content: space-between;
 }
 
-.createProjectButton:hover {
-  background-color: #5680E9; 
-}
-
-.tableContainer {
-  margin-bottom: 100px;
-}
-
-table {
+.thumbnailContainer {
   width: 100%;
-  border-collapse: collapse;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoThumbnail {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.emptyMessage {
+  text-align: center;
   margin-top: 20px;
 }
 
-table th,
-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-table th {
-  background-color: #8860D0;
+.sortSection {
+  margin-top: 20px;
   color: white;
 }
 
-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-table tr:hover {
-  background-color: #ddd;
-}
-
-table .projectNameColumn {
-  width: 80%;
-}
-
-table .actionColumn {
-  width: 20%;
-}
-
-table tr td button {
-  background-color: #46beed;
+.sortSection select {
+  display: block;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
   border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-family: 'Jura', sans-serif;
 }
 
-table tr td button:hover {
-  background-color: #5680E9;
-}
-
-.noProjects {
+.mediaName {
+  margin-top: 10px;
   text-align: center;
-  margin-top: 50px;
 }
-
-.noProjects p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
 

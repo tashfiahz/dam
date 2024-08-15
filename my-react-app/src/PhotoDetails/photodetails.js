@@ -1,13 +1,141 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './photodetails.module.css';
 import { Link } from 'react-router-dom';
-import logo from '../penguin.png';
+import logo from '../Homepage/penguin.png';
 
 function PhotoDetails() {
+  const navigate = useNavigate();
+  const { projectname, name } = useParams();
+  const [userId, setUserId] = useState(null);
+  const [newName, setNewName] = useState(name);
+  const [newProject, setNewProject] = useState(projectname);
+  const [projects, setProjects] = useState([]);
+  const [url, setUrl] = useState('');
+  const [description, setDescription] = useState('');
+  const [wordCount, setWordCount] = useState(description.split(' ').length);
   const [selectedTags, setSelectedTags] = useState([]);
   const [inputTag, setInputTag] = useState('');
-  const [description, setDescription] = useState('');
-  const [wordCount, setWordCount] = useState(0);
+  const [similarPhotos, setSimilarPhotos] = useState([]);
+
+  const getUserId = async () => {
+    try {
+      const response = await fetch('http://localhost:3501/get_user_info', {
+        method: 'GET'
+      });
+      const data = await response.json();
+      if (data.id) {
+        const id = data.id;
+        setUserId(id);
+        return id;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getProjects = async (user) => {
+    try {
+      const response = await fetch('http://localhost:3501/retrieve-projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user }),
+      });
+      const data = await response.json();
+      setProjects(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getMediaFile = async (user, name, projectname) => {
+    try {
+      const response = await fetch('http://localhost:3501/retrieve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user, name, projectname }),
+      });
+      const data = await response.json();
+      if (data[0]) {
+        setUrl(data[0].url);
+        setDescription(data[0].description);
+        setSelectedTags(data[0].tags);
+      }
+      return data[0].url;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getSimilarPhotos = async (url) => {
+    try {
+      const response = await fetch('http://localhost:3501/image_search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      setSimilarPhotos(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const updateMedia = async () => {
+    try {
+      const response = await fetch('http://localhost:3501/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          userId,
+          oldName: name,
+          oldProject: projectname,
+          project: newProject,
+          description,
+          name: newName,
+          tags: selectedTags
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      navigate(`/${projectname}`);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const deleteMedia = async () => {
+    const confirm = window.confirm('Are you sure you want to delete this media?');
+    if (confirm) {
+      try {
+        const response = await fetch('http://localhost:3501/remove', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            userId,
+            project: projectname,
+            name
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+        navigate(`/${projectname}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -45,6 +173,25 @@ function PhotoDetails() {
   };
 
   useEffect(() => {
+    const handleFirstRender = async () => {
+      try {
+        const id = await getUserId();
+        if (id) {
+          await getProjects(id);
+        }
+        if (id && name && projectname) {
+          const link = await getMediaFile(id, name, projectname);
+          setWordCount(description.split(" ").length);
+          await getSimilarPhotos(link);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    handleFirstRender();
+  }, [name, projectname]);
+
+  useEffect(() => {
     if (wordCount > 400) {
       const truncatedText = description.split(/\s+/).slice(0, 400).join(' ');
       setDescription(truncatedText);
@@ -63,28 +210,36 @@ function PhotoDetails() {
         </Link>
       </div>
       <div className={styles.content}>
-        <div className={styles.imageContainer}>
-          <img src="https://via.placeholder.com/300x200" alt="Main" className={styles.mainImage} />
-        </div>
-        <div className={styles.detailsSection}>
+        <div className={styles.imageWithMetadata}>
+          <div className={styles.imageContainer}>
+            <img src={url} alt="Main" className={styles.mainImage} />
+          </div>
           <div className={styles.detailsContainer}>
             <div className={styles.title}>
               <label>Title:</label>
-              <input type="text" className={styles.titleInput} />
+              <input 
+                type="text" 
+                className={styles.titleInput}
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+              />
             </div>
             <div className={styles.type}>
-              <label htmlFor="mediaType">Type:</label>
-              <select id="mediaType" className={styles.dropdown}>
-                <option value="photo">Photo</option>
-                <option value="video">Video</option>
-              </select>
+              <span id="mediaType" className={styles.mediaType}>Type: Photo</span>
             </div>
             <div className={styles.projectsw}>
               <label htmlFor="project">Project:  </label>
-              <select id="project" className={styles.dropdown}>
-                <option value="project1">Project 1</option>
-                <option value="testingProject">Testing Project</option>
-                <option value="tashProject">Tash Project</option>
+              <select 
+                id="project" 
+                className={styles.dropdown}
+                value={newProject}
+                onChange={(e) => setNewProject(e.target.value)}
+              >
+                {projects.map((project) => (
+                  <option key={project} value={project}>
+                    {project}
+                  </option>
+                ))}
               </select>
             </div>
             <div className={styles.tags}>
@@ -110,25 +265,35 @@ function PhotoDetails() {
               </div>
             </div>
           </div>
-          <div className={styles.descriptionContainer}>
-            <label>Description:</label>
-            <textarea
-              className={styles.descriptionInput}
-              value={description}
-              onChange={handleDescriptionChange}
-              maxLength="2000" 
-              placeholder="Enter description (up to 400 words)"
-            />
-            <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
+        </div>
+        <div className={styles.descriptionContainer}>
+          <label>Description:</label>
+          <textarea
+            className={styles.descriptionInput}
+            value={description}
+            onChange={handleDescriptionChange}
+            maxLength="2000" 
+            placeholder="Enter description (up to 400 words)"
+          />
+          <div id="wordCount" className={styles.wordCount}>{wordCount} / 400 words</div>
+        </div>
+        <div className={styles.similarImagesContainer}>
+          <label>Similar Images:</label>
+          <div className={styles.similarImages}>
+            {similarPhotos.map((photo, index) => (
+              <img 
+                key={index}
+                src={photo.image_url}
+                alt={`Similar image ${index + 1}`}
+                onClick={() => window.location.href = photo.source_url}
+                className={styles.similarImage}
+              />
+            ))}
           </div>
-          <div className={styles.similarImagesContainer}>
-            <label>Similar Images:</label>
-            <div className={styles.similarImages}>
-              <img src="https://via.placeholder.com/150" alt="Similar 1" />
-              <img src="https://via.placeholder.com/150" alt="Similar 2" />
-            </div>
-          </div>
-          <button className={styles.saveButton}>Save</button>
+        </div>
+        <div className={styles.buttonGroup}>
+          <button className={styles.saveButton} onClick={() => updateMedia()}>Save</button>
+          <button className={styles.deleteButton} onClick={() => deleteMedia()}>Delete</button>
         </div>
       </div>
     </div>

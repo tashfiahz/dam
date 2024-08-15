@@ -10,10 +10,12 @@ import multer from 'multer'
 //import { dirname, join } from 'path';
 //import { fileURLToPath } from 'url'; // Import to define __dirname in ESM
 import { Storage } from '@google-cloud/storage';
+import vision from '@google-cloud/vision';
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 dotenv.config();
 
+//Supertokens setup from https://supertokens.com/docs/emailpassword/pre-built-ui/setup/backend
 supertokens.init(SuperTokensConfig);
 
 const app = express();
@@ -30,6 +32,7 @@ app.use(cors({
 
 app.use(middleware());
 
+//From https://supertokens.com/docs/thirdpartypasswordless/common-customizations/get-user-info
 app.get('/get_user_info', verifySession(), async (req, res) => {
     try {
         let userId = req.session.getUserId();
@@ -48,6 +51,8 @@ const storage = new Storage({
     //keyFilename: join(__dirname, 'keys.json'),
     keyFilename: 'keys.json', 
 });
+
+const vision_client = new vision.ImageAnnotatorClient();
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
@@ -72,6 +77,7 @@ async function main() {
 main().catch(console.error);
 
 //Check if user already exists and has a GCS bucket, if not, create a new one
+//From https://cloud.google.com/storage/docs/listing-buckets
 app.post('/check-bucket', async (req, res) => {
     const { userId } = req.body;
     const bucketName = userId;
@@ -121,13 +127,15 @@ app.post('/create-project' ,  async (req, res) => {
     }
 });
 
+
+//From https://cloud.google.com/storage/docs/deleting-objects
 app.post('/delete-project', async (req, res) => {
     const { userId, project } = req.body;
     const bucketName = userId;
     try {
         //Get all metadata for files in project, save their file names
         const files = await db.find({ userId, project }).toArray();
-        const filenames = files.map(file => file.name);
+        const filenames = files.filter(file => file.name).map(file => file.name);
         //Delete all metadata for files in project
         await db.deleteMany({ userId, project });
         console.log(filenames);
@@ -163,6 +171,7 @@ app.post('/rename-project', async (req, res) => {
     }
 })
 
+//Generating signed URL from https://cloud.google.com/storage/docs/access-control/signing-urls-with-helpers
 app.post('/upload-gcs', upload.single('file'), async (req, res) => {
     const { userId } = req.body;
     const bucketName = userId;
@@ -244,42 +253,43 @@ app.post('/retrieve' ,  async (req, res) => {
     }
 });
 
-/*
+//SENDS EMPTY ARRAY IF NO SIMILAR IMAGES
+//From https://cloud.google.com/vision/docs/detecting-web?apix_params=%7B%22resource%22%3A%7B%22requests%22%3A%5B%7B%22features%22%3A%5B%7B%22type%22%3A%22WEB_DETECTION%22%7D%5D%2C%22image%22%3A%7B%22source%22%3A%7B%22gcsImageUri%22%3A%22gs%3A%2F%2Fcloud-samples-data%2Fvision%2Fweb%2Fcarnaval.jpeg%22%7D%7D%7D%5D%7D%7D
 app.post('/image_search', async (req, res) => {
-    const image_api_key = process.env.GOOGLE_IMAGE_KEY;
-    const photo_url = req.body.url
-    const response = await getJson({
-        engine: "google_reverse_image",
-        image_url: photo_url,
-        api_key: image_api_key
-    }, (json) => {
-        json(["inline_images"]);
-    });
-    res.send(response);
-});
-*/
+    const { url } = req.body;
+    try {
+        //const [result] = await vision_client.webDetection(`gs://${bucketName}/${fileName}`);
+        const [result] = await vision_client.webDetection(url);
+        const webDetection = result.webDetection;
+        const similarImages = [];
+        if (webDetection.pagesWithMatchingImages.length) {
+            webDetection.pagesWithMatchingImages.forEach(page => {
+                if (page.fullMatchingImages.length) {
+                    similarImages.push({
+                        source_url: page.url,
+                        image_url: page.fullMatchingImages[0].url,
+                    });
+                }
+            })
+        }
+        res.send(similarImages);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send(error.message);
+    }
+})
 
-async function generateV4ReadSignedURL(bucket_name, file_name) {
-    const options = {
-        version: 'v4',
-        action: 'read',
-        expires: Date.now() + 15 * 60 * 1000,
-    };
-    const url = await storage.bucket(bucket_name).file(file_name).getSignedUrl(options);
-    console.log('Generated GET signed URL: ');
-    console.log(url[0]);
-    return url[0];
-}
-
+//DATA.RESULT ARRAY IS EMPTY IF NO SONG DETECTED
 //LIMIT TESTING TO PRESERVE MONTHLY REQUESTS
+//From https://docs.audd.io/enterprise
+
 app.post('/audio_recognition', async (req, res) => {
     const audio_api = 'https://enterprise.audd.io/';
     const audio_api_key = process.env.AUDIO_API_KEY;
-    const { userId, name } = req.body
-    const video_url = await generateV4ReadSignedURL(userId, name);
+    const { url } = req.body
     const info = {
         'api_token': audio_api_key,
-        'url': video_url,
+        'url': url,
         'accurate_offsets': 'true',
         'skip': '0',
         'every': '1',
@@ -297,66 +307,41 @@ app.post('/audio_recognition', async (req, res) => {
     }
 });
 
-//------------------------------------MEDIA CRUD---------------------------------
-/*
-
 app.post('/update', async (req, res) => {
-    //add user 
-    const {url, name, description} = req.body;
-
+    const {userId, oldName, oldProject, project, description, name, tags } = req.body;
     try {
-        const result = await coll.updateOne(
-            {url},
-            {
-            //tag,
-                $set: {
-                    name,
-                    description
-                }
-            })
-        ;
+        const result = await db.updateOne({
+            userId,
+            name: oldName,
+            project: oldProject,
+        }, { 
+            $set: {
+                name,
+                description,
+                project,
+                tags,
+            }
+        });
         res.send(result);
     } catch (error) {
         res.status(500).send({ message: 'Error updating the metadata', error });
     }
-
 });
 
+
+//From https://cloud.google.com/storage/docs/deleting-objects
 app.post('/remove', async (req, res) => {
-    const {url} = req.body;
-    //const foundasset = await coll.findOne({url});
-    //await coll.deleteOne({_id: foundasset._id})
-    try{
-        const foundasset = await coll.findOne({url});
-
-        if (foundasset) {
-            await coll.deleteOne({_id: foundasset._id})
-            res.send({ message: 'Asset removed' });
-        } else {
-            res.status(500).send({ message: 'asset not found ' });
-        }
-
-    //gcs.bucket.remove
-    //await storage.bucket(bucketName).file(url).delete()
-    } catch (error) {
-        res.status(500).send({ message: 'Error deleting the metadata', error });
-
-    }
-});
-
-//---------------------------------------APIS------------------------------------
-
-app.get('/cloud_test', async (req, res) => {
+    const { userId, project, name } = req.body;
+    const bucketName = userId;
     try {
-        const test = await generateV4ReadSignedURL(video_file_name);
-        res.send({test});
+        await db.deleteOne({userId, project, name});
+        storage.bucket(bucketName).file(name).delete();
+        res.send({ message: 'Project and its files deleted from both MongoDB and GCS'});
     } catch (error) {
         console.error(error);
-        res.send(error.message);
+        res.status(500).send({ message: 'Error deleting media', error });
     }
-})
-
-*/
+});
 
 app.use(errorHandler());
 
@@ -401,4 +386,14 @@ app.post('/upload', upload.single('asset'), async(req, res) => {
         await client.close();
     }
 });
+
+app.get('/cloud_test', async (req, res) => {
+    try {
+        const test = await generateV4ReadSignedURL(video_file_name);
+        res.send({test});
+    } catch (error) {
+        console.error(error);
+        res.send(error.message);
+    }
+})
 */
