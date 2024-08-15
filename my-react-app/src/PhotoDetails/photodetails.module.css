@@ -67,7 +67,7 @@
 .mainImage {
   width: 500px; 
   height: 450px; 
-  object-fit: cover; 
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 20px;
 }

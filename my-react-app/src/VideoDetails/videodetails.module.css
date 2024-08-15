@@ -68,7 +68,7 @@
 .mainVideo {
   width: 600px; 
   height: 450px; 
-  object-fit: cover; 
+  object-fit: contain;
   border-radius: 9px;
   margin-bottom: 20px;
 }
