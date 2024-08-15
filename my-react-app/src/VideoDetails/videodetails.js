@@ -336,7 +336,6 @@ function VideoDetails() {
 
           {isModalVisible && (
             <VideoConfirmationModal
-              message="Are you sure you want to delete this media?"
               onConfirm={handleConfirmDelete}
               onCancel={handleCancelDelete}
             />
