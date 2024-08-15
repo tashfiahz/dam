@@ -13,8 +13,8 @@ export const SuperTokensConfig = {
     },
     appInfo: {
         appName: "dam.io",
-        apiDomain: "https://dambackend.onrender.com/",
-        websiteDomain: "https://damfront6.onrender.com/",
+        apiDomain: "https://dambackend.onrender.com",
+        websiteDomain: "https://damfront6.onrender.com",
         apiBasePath: "/auth",
         websiteBasePath: "/auth",
     },
