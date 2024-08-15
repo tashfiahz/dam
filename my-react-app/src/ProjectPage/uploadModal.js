@@ -57,7 +57,8 @@ function UploadModal({ closeModal, userId, projectname }) {
     fileData.append('userId', userId);
 
     try {
-      const filegcs = await fetch('http://localhost:3501/upload-gcs', {
+      // Step 1: Upload the file to GCS and get the URL
+      const filegcs = await fetch('https://dambackend.onrender.com/upload-gcs', {
         method: 'POST',
         body: fileData,
       });
@@ -78,7 +79,7 @@ function UploadModal({ closeModal, userId, projectname }) {
         url: fileUrl
       };
 
-      const metadataResponse = await fetch('http://localhost:3501/upload-mongo', {
+      const metadataResponse = await fetch('https://dambackend.onrender.com/upload-mongo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

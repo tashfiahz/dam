@@ -24,7 +24,7 @@ function PhotoDetails() {
 
   const getUserId = async () => {
     try {
-      const response = await fetch('http://localhost:3501/get_user_info', {
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
         method: 'GET'
       });
       const data = await response.json();
@@ -40,7 +40,7 @@ function PhotoDetails() {
 
   const getProjects = async (user) => {
     try {
-      const response = await fetch('http://localhost:3501/retrieve-projects', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve-projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ function PhotoDetails() {
 
   const getMediaFile = async (user, name, projectname) => {
     try {
-      const response = await fetch('http://localhost:3501/retrieve', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function PhotoDetails() {
 
   const getSimilarPhotos = async (url) => {
     try {
-      const response = await fetch('http://localhost:3501/image_search', {
+      const response = await fetch('https://dambackend.onrender.com/image_search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ function PhotoDetails() {
 
   const updateMedia = async () => {
     try {
-      const response = await fetch('http://localhost:3501/update', {
+      const response = await fetch('https://dambackend.onrender.com/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,23 +117,26 @@ function PhotoDetails() {
   }
 
   const deleteMedia = async () => {
-    try {
-      const response = await fetch('http://localhost:3501/remove', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          project: projectname,
-          name,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
-      navigate(`/${projectname}`);
-    } catch (error) {
-      console.error(error);
+    const confirm = window.confirm('Are you sure you want to delete this media?');
+    if (confirm) {
+      try {
+        const response = await fetch('https://dambackend.onrender.com/remove', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            userId,
+            project: projectname,
+            name
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+        navigate(`/${projectname}`);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 

@@ -19,8 +19,8 @@ import styles from './App.module.css';
 SuperTokens.init({
   appInfo: {
       appName: "dam.io",
-      apiDomain: "http://localhost:3501",
-      websiteDomain: "http://localhost:3000",
+      apiDomain: "https://dambackend.onrender.com",
+      websiteDomain: "https://damfront6.onrender.com",
       apiBasePath: "/auth",
       websiteBasePath: "/auth",
   },

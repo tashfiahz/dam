@@ -20,8 +20,8 @@ function HomePage() {
 
   const getUserName = async () => {
     try {
-      const response = await fetch('http://localhost:3501/get_user_info', {
-        method: 'GET',
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
+        method: 'GET'
       });
       const data = await response.json();
       if (data.emails && data.emails.length > 0) {
@@ -37,8 +37,8 @@ function HomePage() {
 
   const getUserId = async () => {
     try {
-      const response = await fetch('http://localhost:3501/get_user_info', {
-        method: 'GET',
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
+        method: 'GET'
       });
       const data = await response.json();
       if (data.id) {
@@ -53,7 +53,7 @@ function HomePage() {
 
   const checkBucket = async (user) => {
     try {
-      await fetch('http://localhost:3501/check-bucket', {
+      await fetch('https://dambackend.onrender.com/check-bucket', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function HomePage() {
 
   const getProjects = async (user) => {
     try {
-      const response = await fetch('http://localhost:3501/retrieve-projects', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve-projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ function HomePage() {
   const handleModalSubmit = async (projectName) => {
     if (modalType === 'create') {
       try {
-        await fetch('http://localhost:3501/create-project', {
+        await fetch('https://dambackend.onrender.com/create-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ function HomePage() {
       }
     } else if (modalType === 'rename') {
       try {
-        await fetch('http://localhost:3501/rename-project', {
+        await fetch('https://dambackend.onrender.com/rename-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

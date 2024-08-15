@@ -27,7 +27,9 @@ function ProjectPage() {
   // GET USERNAME FOR DISPLAY
   const getUserName = async () => {
     try {
-      const response = await fetch('http://localhost:3501/get_user_info', { method: 'GET' });
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
+        method: 'GET'
+      });
       const data = await response.json();
       if (data.emails && data.emails.length > 0) {
         const email = data.emails[0];
@@ -43,7 +45,9 @@ function ProjectPage() {
   // GET USERID FOR BACKEND REQUESTS
   const getUserId = async () => {
     try {
-      const response = await fetch('http://localhost:3501/get_user_info', { method: 'GET' });
+      const response = await fetch('https://dambackend.onrender.com/get_user_info', {
+        method: 'GET'
+      });
       const data = await response.json();
       if (data.id) {
         setUserId(data.id);
@@ -56,7 +60,7 @@ function ProjectPage() {
 
   const getMedia = async (userId, projectname) => {
     try {
-      const response = await fetch('http://localhost:3501/retrieve', {
+      const response = await fetch('https://dambackend.onrender.com/retrieve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, projectname })
