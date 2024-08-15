@@ -5,6 +5,7 @@ import styles from './photodetails.module.css';
 import { Link } from 'react-router-dom';
 import logo from '../Homepage/penguin.png';
 
+
 function PhotoDetails() {
   const navigate = useNavigate();
   const { projectname, name } = useParams();

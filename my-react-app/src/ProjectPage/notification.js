@@ -6,7 +6,7 @@ function Notifications({ message, onClose }) {
     <div className={styles.modalOverlay}>
       <div className={styles.notificationModal}>
         <p>{message}</p>
-        <button className={styles.modalCloseButton} onClick={onClose}>OK</button>
+        <button className={styles.modalCloseButton} onClick={onClose}>Ok</button>
       </div>
     </div>
   );

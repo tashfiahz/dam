@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import logo from '../Homepage/penguin.png';
 import music from './Music.png';
 
+
 function VideoDetails() { 
   const navigate = useNavigate();
   const { projectname, name } = useParams();
