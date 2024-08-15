@@ -5,6 +5,7 @@ import styles from './videodetails.module.css';
 import { Link } from 'react-router-dom';
 import logo from '../Homepage/penguin.png';
 import music from './Music.png';
+import VideoConfirmationModal from './videoconfirmationModal';
 
 
 function VideoDetails() { 
@@ -24,6 +25,7 @@ function VideoDetails() {
   const [album, setAlbum] = useState('No song detected');
   const [link, setLink] = useState('No song detected');
   //const [detectedMusic, setDetectedMusic] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getUserId = async () => {
     try {
@@ -130,28 +132,38 @@ function VideoDetails() {
   }
 
   const deleteMedia = async () => {
-    const confirm = window.confirm('Are you sure you want to delete this media?');
-    if (confirm) {
-      try {
-        const response = await fetch('http://localhost:3501/remove', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ 
-            userId,
-            project: projectname,
-            name
-          }),
-        });
-        const data = await response.json();
-        console.log(data);
-        navigate(`/${projectname}`);
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      const response = await fetch('http://localhost:3501/remove', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          project: projectname,
+          name,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      navigate(`/${projectname}`);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
+
+  const handleDeleteClick = () => {
+    setIsModalVisible(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    setIsModalVisible(false);
+    deleteMedia();
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false); 
+  };
 
   const handleTagClick = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -226,10 +238,10 @@ function VideoDetails() {
         </Link>
       </div>
       <div className={styles.content}>
-        <div className={styles.imageWithMetadata}>
-          <div className={styles.imageContainer}>
+        <div className={styles.videoWithMetadata}>
+          <div className={styles.videoContainer}>
             {url && (
-              <video controls muted className={styles.mainImage}>
+              <video controls muted className={styles.mainVideo}>
                 <source src={url} />
                 Your browser does not support the video tag.
               </video>
@@ -281,7 +293,7 @@ function VideoDetails() {
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
                   className={styles.tagInput}
-                  placeholder="Type and press Enter"
+                  placeholder="Type and press Enter to create tag(s)"
                 />
               </div>
             </div>
@@ -315,8 +327,21 @@ function VideoDetails() {
         </div>
         <div className={styles.buttonGroup}>
           <button className={styles.saveButton} onClick={() => updateMedia()}>Save</button>
-          <button className={styles.deleteButton} onClick={() => deleteMedia()}>Delete</button>
+          <button className={styles.deleteButton} onClick={handleDeleteClick}>
+            Delete
+          </button>
+
+          {isModalVisible && (
+            <VideoConfirmationModal
+              message="Are you sure you want to delete this media?"
+              onConfirm={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+            />
+          )}
         </div>
+        <Link to={`/${projectname}`} className={styles.backLink}>
+        ← Back to Projects Page
+      </Link>
       </div>
     </div>
   );
