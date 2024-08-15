@@ -112,17 +112,20 @@ function HomePage() {
 
 
   const handleDeleteProject = async (projectname) => {
-    try {
-      await fetch('http://dambackend.onrender.com/delete-project', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, project: projectname }),
-      });
-      setProjects((prevProjects) => prevProjects.filter((project) => project !== projectname));
-    } catch (error) {
-      console.error(error);
+    const confirm = window.confirm('Are you sure you want to delete this project?');
+    if (confirm) {
+      try {
+        await fetch('http://dambackend.onrender.com/delete-project', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, project: projectname }),
+        });
+        setProjects((prevprojects) => prevprojects.filter((project) => project !== projectname));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
