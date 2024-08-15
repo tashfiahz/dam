@@ -345,8 +345,6 @@ app.post('/remove', async (req, res) => {
 
 app.use(errorHandler());
 
-app.listen(port, () => console.log(`Server listening on port ${port}`));
-
 // DO NOT DEFINE ANY ENDPOINTS BELOW THIS POINT! ALL ENDPOINTS MUST BE DEFINED BETWEEN app.use(middleware()); AND app.use(errorHandler());
 
 /*
