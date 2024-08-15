@@ -113,7 +113,7 @@ function HomePage() {
 
   const handleDeleteProject = async (projectname) => {
     try {
-      await fetch('http://localhost:3501/delete-project', {
+      await fetch('http://dambackend.onrender.com/delete-project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
