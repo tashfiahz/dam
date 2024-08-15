@@ -115,7 +115,7 @@ function HomePage() {
     const confirm = window.confirm('Are you sure you want to delete this project?');
     if (confirm) {
       try {
-        await fetch('http://dambackend.onrender.com/delete-project', {
+        await fetch('https://dambackend.onrender.com/delete-project', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
