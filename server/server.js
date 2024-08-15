@@ -24,7 +24,7 @@ const port = 3501;
 const upload = multer();
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "http://damfront6.onrender.com",
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     methods: ["GET", "PUT", "POST", "DELETE"],
     credentials: true,
