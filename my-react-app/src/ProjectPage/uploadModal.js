@@ -29,6 +29,7 @@ function UploadModal({ closeModal, userId, projectname }) {
   };
 
   //Valid file types from https://www.w3schools.com/tags/tag_video.asp#:~:text=There%20are%20three%20supported%20video,MP4%2C%20WebM%2C%20and%20OGG. and https://www.w3schools.com/html/html_images.asp
+  //Get file type from https://www.geeksforgeeks.org/javascript-webapi-file-file-type-property/
   const isValidFile = (file) => {
     const types = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/webm', 'video/ogg'];
     return types.includes(file.type);
