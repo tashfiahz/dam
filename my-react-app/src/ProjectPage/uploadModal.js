@@ -59,7 +59,6 @@ function UploadModal({ closeModal, userId, projectname }) {
     fileData.append('userId', userId);
 
     try {
-      // Step 1: Upload the file to GCS and get the URL
       const filegcs = await fetch('https://dambackend.onrender.com/upload-gcs', {
         method: 'POST',
         body: fileData,
