@@ -93,7 +93,7 @@ function HomePage() {
     handleFirstLogin();
   }, []);
 
-
+  //From https://supertokens.com/docs/passwordless/pre-built-ui/sign-out
   const onLogOut = async () => {
     await signOut();
     window.location.href = "/auth";

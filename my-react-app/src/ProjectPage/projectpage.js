@@ -157,6 +157,7 @@ function ProjectPage() {
     window.location.reload();
   }
 
+  ////Sorting strings from https://stackoverflow.com/questions/52030110/sorting-strings-in-descending-order-in-javascript-most-efficiently
   const sortedMedia = filteredMedia.sort((x, y) => {
     if (sortOrder === 'a-z') {
       return x.name.localeCompare(y.name);

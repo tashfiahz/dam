@@ -282,7 +282,6 @@ app.post('/image_search', async (req, res) => {
 //DATA.RESULT ARRAY IS EMPTY IF NO SONG DETECTED
 //LIMIT TESTING TO PRESERVE MONTHLY REQUESTS
 //From https://docs.audd.io/enterprise
-
 app.post('/audio_recognition', async (req, res) => {
     const audio_api = 'https://enterprise.audd.io/';
     const audio_api_key = process.env.AUDIO_API_KEY;
