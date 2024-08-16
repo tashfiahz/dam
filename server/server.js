@@ -129,6 +129,7 @@ app.post('/create-project' ,  async (req, res) => {
 
 
 //From https://cloud.google.com/storage/docs/deleting-objects
+//Managing promises from https://stackoverflow.com/questions/70099473/how-to-wait-for-all-promises-to-be-finished
 app.post('/delete-project', async (req, res) => {
     const { userId, project } = req.body;
     const bucketName = userId;
@@ -172,7 +173,7 @@ app.post('/rename-project', async (req, res) => {
 })
 
 //Generating signed URL from https://cloud.google.com/storage/docs/access-control/signing-urls-with-helpers
-//https://googleapis.dev/nodejs/storage/latest/File.html used to create write stream to pass file to gcs
+//https://googleapis.dev/nodejs/storage/latest/File.html used to create write stream to pass file to GCS
 app.post('/upload-gcs', upload.single('file'), async (req, res) => {
     const { userId } = req.body;
     const bucketName = userId;
