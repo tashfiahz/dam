@@ -172,6 +172,7 @@ app.post('/rename-project', async (req, res) => {
 })
 
 //Generating signed URL from https://cloud.google.com/storage/docs/access-control/signing-urls-with-helpers
+//https://googleapis.dev/nodejs/storage/latest/File.html used to create write stream to pass file to gcs
 app.post('/upload-gcs', upload.single('file'), async (req, res) => {
     const { userId } = req.body;
     const bucketName = userId;
